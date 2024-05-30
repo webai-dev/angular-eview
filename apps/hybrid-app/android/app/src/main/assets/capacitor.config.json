@@ -1,0 +1,7 @@
+{
+    "appId": "org.unicc.ewer.eview",
+    "appName": "Eview",
+    "bundledWebRuntime": false,
+    "npmClient": "npm",
+    "webDir": "www"
+}

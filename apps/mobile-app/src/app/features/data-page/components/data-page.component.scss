@@ -1,0 +1,142 @@
+.header {
+  position: sticky;
+  top: 48px;
+  z-index: 2;
+  background: #FAFAFA 0% 0% no-repeat padding-box;
+  opacity: 0.98;
+  outline: 1px solid white;
+  display: flex;
+  max-width: 50%;
+}
+
+.left-side {
+  height: calc(100vh - 220px);
+  overflow: auto;
+  &.show-post-detail {
+    @media (max-width: 767px) {
+      display: none;
+    }
+  }
+}
+
+.middle-side {
+  height: calc(100vh - 220px);
+  border-left: 1px solid #00000020;
+  &.show-post-detail {
+    overflow-y: scroll;
+    @media (max-width: 767px) {
+      position: absolute;
+      opacity: 0;
+      z-index: -1;
+    }
+  }
+}
+
+.right-side {
+  height: calc(100vh - 220px);
+//  min-height: calc(100vh - 48px - 24px * 1.5);
+  border-left: 1px solid #00000020;
+  @media (max-width: 767px) {
+    position: absolute;
+    opacity: 0;
+    z-index: -1;
+  }
+  &.show-post-detail {
+    overflow-y: scroll;
+    @media (max-width: 767px) {
+      position: unset;
+      opacity: 1;
+      z-index: 1;
+    }
+  }
+  .container {
+    position: sticky;
+    top: calc(0% - 100% - 90px);
+    fa-icon.close-icon {
+      position: absolute;
+      right: 0;
+    }
+    .row:not(:last-child) {
+      border-bottom: 1px solid #00000020;
+    }
+  }
+}
+
+.filter-dropdown {
+  width: calc(100% + 250px);
+  margin-left: calc(100% - 42px);
+}
+
+/* width */
+::-webkit-scrollbar {
+  width: 10px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+  box-shadow: inset 0 0 5px grey;
+  border-radius: 10px;
+}
+ 
+/* Handle */
+::-webkit-scrollbar-thumb {
+  background: #888; 
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+  background: #555; 
+}
+
+.custom-tab-header{
+  font-size: 14px;
+  color: #4383C2 !important;
+}
+
+.custom-report-info {
+  font-size: 14px;
+  color: #000000 !important;
+}
+
+.flex-report-header-wrapper {
+ display: flex;
+ flex-direction: row;
+ flex-wrap:wrap;
+ position: static;
+}
+
+.text-underline {
+  text-decoration: underline;
+}
+
+.font-size-12 {
+  font-size: 12px; 
+}
+
+.nav-tabs .nav-link:hover {
+  border: none !important;
+}
+
+.nav-tabs .nav-link.active {
+  border-bottom: 4.5px solid #4383C2 !important;
+  background-color: #FAFAFA !important;
+}
+
+.marg-left-2 {
+  margin-left : 2em;
+}
+
+.marg-left-1 {
+  margin-left : 1em;
+}
+
+.margin-top-2 {
+  margin-top: 2em !important;
+  @media (max-width: 767px) {
+    margin-top: 6em !important;
+  }
+}
+
+.min-width-300 {
+  min-width: 300px;
+}

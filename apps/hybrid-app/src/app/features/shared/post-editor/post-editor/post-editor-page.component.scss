@@ -1,0 +1,72 @@
+.badge {
+  font-size: 16px;
+}
+
+.flexContainer {
+  display: inline-flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  align-content: space-between;
+  gap: 5%;
+  width: 100%;
+}
+
+/*modal specific styles*/
+.createNewIncidentLabel {
+  font-size: 24px;
+  color: #264952;
+  text-align: left;
+}
+
+.borderColorBlack {
+  border-color: #000000;
+}
+
+.fontSize12 {
+  font-size:12px;
+}
+
+.fontSize14 {
+  font-size:14px;
+}
+
+.fontSize16 {
+  font-size: 16px;
+}
+
+::placeholder { 
+  color: #264952;
+  text-align: left;
+  letter-spacing: 0px;
+  opacity: 0.3;
+}
+
+.btnSubmit {
+  background: #4383C2 0% 0% no-repeat padding-box;
+  border-radius: 8px;
+  opacity: 1;
+  width: 15em;
+  line-height: 2 !important;
+  color : #fff !important; 
+}
+
+.close:hover {
+  border:none;
+}
+
+::ng-deep .customModalWindowClass .modal-dialog { 
+  max-width: 95%;
+  width: 95%;
+}
+
+.close {
+  font-size: 2.5rem !important;
+  line-height: 1;
+  text-shadow: 0 1px 0 #fff;
+}
+
+.fontColorRadioLabel {
+  color: #264952;
+}
+
+

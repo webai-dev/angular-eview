@@ -1,0 +1,157 @@
+<nav class="navbar navbar-dark fixed-top bg-dark flex-md-nowrap p-0 shadow">
+  <div class="appLabel navbar-brand">
+    <fa-icon [icon]="'bars'" (click)="menuVisibile = !menuVisibile" class="d-xl-none"></fa-icon>
+    {{ deploymentName$ | async }}
+    <button (click)="openCreateIncident()" class="btn custom-btn-create-incident fontRobotoBold"> 
+      <!-- <img id="icon-add" title="icon-add" src="/assets/images/Icon_add.svg" /> -->
+      <i class="fa fa-lg fa-plus-circle color-white" aria-hidden="true"></i>
+       <span
+        class="txt-create-incident">{{ 'CREATE_REPORT' | translate}}</span></button>
+    
+  </div>
+
+  <div class="button-wrapper">
+
+    <div class="rightSideContainer">
+
+      <button class="btn btn-link btn-login" *ngIf="!(user$ | async)" [routerLink]="'/login'">
+        <fa-icon [icon]="'sign-in-alt'"></fa-icon> {{ 'LOGIN' | translate }}
+      </button>
+
+      <div ngbDropdown #notificationsDropdown="ngbDropdown">
+        <button class="btn btn-link" id="notifications-dropdown"
+          (click)="$event.stopPropagation(); notificationsDropdown.open()">
+          <div class="notification-row">
+            <span>
+              <fa-icon *ngIf="!(unreadNotifications$ | async)" class="bell-color" [icon]="'bell'"></fa-icon>
+              <img *ngIf="unreadNotifications$ | async" id="notif-bell-icon"
+                src="/assets/images/notification_icon_bell.svg" />
+            </span>
+          </div>
+        </button>
+        <div ngbDropdownMenu aria-labelledby="notifications-dropdown" class="notifications-dropdown">
+          <eview-notifications></eview-notifications>
+        </div>
+      </div>
+
+      
+      <div class="nav-user-info" *ngIf="user$ | async">
+        <!--notification dropdown-->
+
+        <img id="user-profile-icon" title="user-profile" src="/assets/images/profile.svg" />
+        <!--user profile dropdown-->
+        <div class="pad-left-15" ngbDropdown>
+          <button class="btn btn-link p-0 userProfileText fontRobotoBold" id="user-dropdown" ngbDropdownToggle>
+            {{ (user$ | async).realname }}
+            <div ngbDropdownMenu aria-labelledby="user-dropdown">
+              <button ngbDropdownItem (click)="onLogoutClick()">
+                <fa-icon [icon]="'sign-out-alt'"></fa-icon>
+                {{ 'LOGOUT' | translate }}
+              </button>
+            </div>
+          </button>
+        </div>
+
+
+      </div>
+      <!--language dropdown-->
+      <div class="roundCircle circleLang countryCodeText">
+        {{currentLang | uppercase}}
+      </div>
+      <div class="cursor-pointer" style="" ngbDropdown id="langDropdown" #languageDropdown="ngbDropdown" ngbDropdownToggle>
+        <div ngbDropdownMenu aria-labelledby="language-dropdown">
+          <div>
+            <span class="dropdown-lang-item" (click)="this.onLanguageChange(item.countryCode)"
+              *ngFor="let item of countryCodes; let i = index" [ngClass]="
+                    currentLang == item.countryCode
+                      ? 'dropdown-item dropdown-item-checked'
+                      : 'dropdown-item'
+                  ">{{ item.countryCode | uppercase }}</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</nav>
+
+<div class="content-wrapper">
+  <div class="main-container">
+    <nav class="bgWhite sidebar" [class.d-none]="!menuVisibile">
+      <!--side bar -->
+      <div class="sidebar-sticky bgWhite">
+        <!-- <div class="nav customFlexNav flex-column padSideBarList">
+          <div class="first-group">
+            <div *ngFor="let i of sidebarItems">
+              <div *ngIf="hasUserPermission(i.permission) | async" class="category-title">
+                <img id="{{i.icon}}" title="{{i.icon}}" src="/assets/images/{{i.icon}}.svg" />
+                <a class="navItemParentLink" [routerLink]="i.link" [routerLinkActive]="i.link ? 'active' : ''"><span
+                    class="sideBarListText fontRobotoBold">{{i.text | translate}}</span> </a>
+              </div>         
+              <div *ngFor="let j of i.children">
+                <span class="childItem fontRobotoRegular" *ngIf="hasUserPermission(i.permission) | async">
+                  <a class="childLink" routerLinkActive="active" [routerLink]="j.link">
+                    <p>{{j.text |translate}}</p>
+                  </a>
+                  <hr class="dividerLine" />
+                </span>
+              </div>
+            </div>
+          </div>
+        </div> -->
+        <div class="nav flex-col padSideBarList">
+          <div class="first-grp">
+               <!-- iterate over list -->
+               <div *ngFor="let i of sidebarItems" class="mb-3">
+                  <img
+                    id="{{i.icon}}"
+                    title="{{i.icon}}"
+                    src="/assets/images/{{i.icon}}.svg"
+                  />
+                  <a
+                  class="navItemParentLink"
+                  [routerLink]="i.link"
+                  [routerLinkActive]="i.link ? 'active' : ''"
+                  (click)="menuVisibile=false"
+                ><span class="sideBarListText fontRobotoBold">{{i.text | translate}}</span> </a>
+                  <!--children of the list-->
+                  <div class="sidebar-menu-item" *ngFor="let j of i.children">
+                    <span class="childItem" *ngIf="hasUserPermission(i.permission) | async">
+                        <a class="childLink fontRobotoRegular" routerLinkActive="active" (click)="menuVisibile=false" [routerLink]="j.link"><p>{{j.text |translate}}</p></a>
+                        <hr class="dividerLine"/>
+                    </span>
+                  </div>  
+              </div>   
+          </div>
+          <!-- <div class="second-grp">
+              <div *ngFor="let i of sidebarItemsSecondGroup">
+                <div  class="category-title" *ngIf="hasUserPermission(i.permission) | async">
+                  <img
+                  id="{{i.icon}}"
+                  title="{{i.icon}}"
+                  src="/assets/images/{{i.icon}}.svg"
+                />
+              <a
+                  class="navItemParentLink"
+                  [routerLink]="i.link"
+                  [routerLinkActive]="i.link ? 'active' : ''"
+                >
+                <span class="sideBarListText fontRobotoBold">{{i.text | translate}}</span>  </a>
+                </div>      
+                <div *ngFor="let j of i.children">
+                <span class="childItem" *ngIf="hasUserPermission(i.permission) | async">
+                    <a class="childLink fontRobotoRegular" [routerLink]="j.link"><p>{{j.text | translate}}</p></a>
+                    <hr class="dividerLine"/>
+                </span>
+                </div>            
+              </div>
+          </div> -->
+        </div>
+
+
+      </div>
+    </nav>
+    <main role="main" class="p-0 bg-main-body main-body">
+      <router-outlet name="dashboard"></router-outlet>
+    </main>
+  </div>
+</div>

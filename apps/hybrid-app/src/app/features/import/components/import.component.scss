@@ -1,0 +1,29 @@
+.flex-file-input-container {
+  display: flex;
+  flex-direction: row;
+}
+
+.file-upload-btn-container {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-end;
+}
+
+.pad-2 {
+  padding: 2em;
+}
+
+.pad-1 {
+  padding: 1em;
+}
+
+.border-none {
+  border: none !important;
+}
+
+.marg-left-1 {
+  margin-left: 1em;
+}
+.modal-header .close {
+  border: none;
+}

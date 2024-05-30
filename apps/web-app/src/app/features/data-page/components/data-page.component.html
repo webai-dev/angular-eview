@@ -1,0 +1,58 @@
+<div
+  class="m-3"
+  *ngIf="posts"
+  infiniteScroll
+  [infiniteScrollDistance]="2"
+  [infiniteScrollThrottle]="50"
+  (scrolled)="onScrollDown()"
+  style="margin-top: 0 !important;"
+>
+  <div class="header row m-0 mb-4 pt-3 pb-3">
+    <div class="btn-group" role="group">
+      <button class="btn btn-md btn-light" *ngIf="!posts && !posts.results">
+        {{ 'LOADING' | translate }}
+      </button>
+      <button class="btn btn-md btn-light" *ngIf="posts && posts.total_count">
+        {{ posts.results.length }}
+        {{ 'DATA_POSTS_INDICATOR_SEPARATOR' | translate }}
+        {{ posts.total_count }}
+        {{ 'DATA_POSTS_INDICATOR_SUFFIX' | translate }}
+      </button>
+      <button class="btn btn-md btn-primary" (click)="onRefreshClick()">
+        <fa-icon [icon]="'redo-alt'" class="mr-0"></fa-icon>
+        <span class="d-none d-md-inline d-lg-inline d-xl-inline ml-1">{{
+          'REFRESH' | translate
+        }}</span>
+      </button>
+    </div>
+  </div>
+  <div class="row mb-3">
+    <div
+      class="left-side col-12 col-lg-6 col-md-6 col-sm-12"
+      [class.show-post-detail]="showPostDetail"
+    >
+      <eview-post *ngFor="let post of posts.results" [post]="post"></eview-post>
+      <p *ngIf="posts.results.length === 0">
+        {{ 'NO_RECORDS' | translate }}
+      </p>
+    </div>
+    <div
+      class="right-side col-12 col-lg-6 col-md-6 col-sm-12"
+      *ngIf="posts"
+      [class.show-post-detail]="showPostDetail"
+    >
+      <div class="container">
+        <div class="row">
+          <fa-icon
+            [icon]="'times'"
+            class="m-0"
+            class="close-icon"
+            *ngIf="showPostDetail"
+            (click)="onPostDetailClose()"
+          ></fa-icon>
+          <eview-post-detail style="width: 100%;"></eview-post-detail>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

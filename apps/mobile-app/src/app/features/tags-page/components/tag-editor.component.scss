@@ -1,0 +1,13 @@
+.btn {
+  border-color: #ced4da;
+  &.btn-bullet {
+    padding-top: 1px;
+    color: #ced4da;
+    background-color: white;
+  }
+}
+
+.custom-margin {
+  margin: 0 1em;
+  margin-top: 3em;
+}

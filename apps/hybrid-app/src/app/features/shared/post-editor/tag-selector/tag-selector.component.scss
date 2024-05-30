@@ -1,0 +1,6 @@
+.max-width-select {
+  max-width: 256px;
+  @media (max-width: 480px) {
+    max-width: 168px;
+  }
+}

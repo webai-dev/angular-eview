@@ -1,0 +1,88 @@
+<nav class="navbar navbar-dark fixed-top bg-dark flex-md-nowrap p-0 shadow">
+  <span class="navbar-brand col-1 col-sm-3 col-md-3 col-lg-2 mr-0">
+    <fa-icon
+      [icon]="'bars'"
+      (click)="menuVisibile = !menuVisibile"
+      class="d-md-none d-lg-none d-xl-none"
+    ></fa-icon>
+    {{ deploymentName$ | async }}
+  </span>
+  <input
+    class="form-control form-control-dark w-100 d-none"
+    type="text"
+    placeholder=""
+    aria-label=""
+    disabled
+  />
+  <ul class="navbar-nav px-3">
+    <button
+      class="btn btn-link btn-login"
+      *ngIf="!(user$ | async)"
+      [routerLink]="'/login'"
+      style="color: #fff;"
+    >
+      <fa-icon [icon]="'sign-in-alt'"></fa-icon> {{ 'LOGIN' | translate }}
+    </button>
+    <div ngbDropdown *ngIf="user$ | async">
+      <button
+        class="btn btn-link p-0"
+        id="user-dropdown"
+        ngbDropdownToggle
+        style="color: #fff;"
+      >
+        <fa-icon [icon]="'user-circle'"></fa-icon>
+        {{ (user$ | async).realname }}
+        <div ngbDropdownMenu aria-labelledby="user-dropdown">
+          <!-- <button ngbDropdownItem>
+            <fa-icon [icon]="'id-card'"></fa-icon> Profile
+          </button> -->
+          <button ngbDropdownItem (click)="onLogoutClick()">
+            <fa-icon [icon]="'sign-out-alt'"></fa-icon>
+            {{ 'LOGOUT' | translate }}
+          </button>
+        </div>
+      </button>
+    </div>
+  </ul>
+</nav>
+
+<div class="container-fluid">
+  <div class="row">
+    <nav
+      class="col-sm-3 col-md-3 col-lg-2 d-none d-md-block bg-light sidebar"
+      [class.d-none]="!menuVisibile"
+    >
+      <div class="sidebar-sticky">
+        <ul class="nav flex-column">
+          <span *ngFor="let i of sidebarItems">
+            <li
+              class="nav-item"
+              *ngIf="hasUserPermission(i.permission) | async"
+            >
+              <a
+                class="nav-link"
+                [routerLink]="i.link"
+                routerLinkActive="active"
+                (click)="menuVisibile = !menuVisibile"
+              >
+                <fa-icon [icon]="i.icon" size="lg"></fa-icon>
+                {{ i.text | translate }}
+              </a>
+            </li>
+          </span>
+        </ul>
+        <footer class="footer text-center" *ngIf="footer.visible">
+          <span> &copy; {{ footer.year }} {{ footer$ | async }} </span>
+          <br />
+          <span *ngFor="let fl of footer.links; let i = index">
+            <span *ngIf="i > 0"> - </span>
+            <a [href]="fl.link">{{ fl.text }}</a>
+          </span>
+        </footer>
+      </div>
+    </nav>
+    <main role="main" class="col-md-9 ml-sm-auto col-lg-10 p-0">
+      <router-outlet name="dashboard"></router-outlet>
+    </main>
+  </div>
+</div>

@@ -1,0 +1,13 @@
+@import '../../../../styles.scss';
+
+.card {
+  &.active {
+    border-color: $undp-jtf-accent-color;
+    box-shadow: 0 0 2px $undp-jtf-accent-color;
+    .card-body {
+      .card-title {
+        color: $undp-jtf-accent-color;
+      }
+    }
+  }
+}

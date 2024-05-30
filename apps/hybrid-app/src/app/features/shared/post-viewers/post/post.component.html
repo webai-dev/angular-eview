@@ -1,0 +1,32 @@
+<div class="card mb-3 active" [class.high-casualty]="getValueByLabel(post.values, FormFields.CASUALTY) > 0" [class.active]="active$ | async" [class.report-urgency]="post.priority === PostPriority.Urgent">
+  <div class="card-body">
+    <div class="card-title flex-card-row-wrapper">
+      <div class="flex-card-row">    
+        <div *ngIf="post.icon">
+          <!-- <img src="/assets/images/icon_shooter.svg"/> -->
+          <i class="{{post.icon}}"></i>
+        </div>   
+        <div class="flex-card-column-wrapper pad-left-15">
+          <div class="fontRobotoBold word-wrap">{{ post.title }}</div>
+          <div class="mr-3 flex-card-report-info-row">
+            <span class="font-weight-bold fontRobotoRegular">{{'POST_ID' | translate }} 
+                <span class="fontRobotoRegular">{{post.id}}</span>
+            </span>
+            <span *ngIf="(post.import_post_id > 0)" class="font-weight-bold fontRobotoRegular">{{'IMPORTED_POST_ID' | translate }} 
+              <span class="fontRobotoRegular">{{post.import_post_id}}</span>
+            </span>
+            <span class="font-weight-bold fontRobotoRegular">{{'POST_SOURCE' | translate }} 
+              <span *ngIf="post.source" class="fontRobotoRegular">{{post.source | translate | uppercase}}</span>
+              <span *ngIf="!post.source" class="fontRobotoRegular">{{'POST_SOURCE_WEB' | translate  }}</span>
+            </span>
+            <span class="font-weight-bold fontRobotoRegular">{{'POST_CASUALTY' | translate }} 
+              <span class="fontRobotoRegular">{{ getValueByLabel(post.values, FormFields.CASUALTY) }}</span>
+            </span>
+          </div>
+        </div>     
+      </div>
+      <div class="cursor-pointer" (click)="onClick()"><i class="fa fa-lg fa-chevron-right arrow-opacity"></i></div>
+    </div>
+    <eview-post-subtitle  (onShowLinkedPostClick)="onShowLinkedClick($event)" [post]="post"></eview-post-subtitle>
+  </div>
+</div>

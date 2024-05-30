@@ -1,0 +1,367 @@
+<div class="mr-3 ml-3 pad-1" *ngIf="formAttribute.id !== -1">
+  <div class="row flex-gap-1 mb-2">
+      <!--flex column-->
+      <div class="flex-column-post-attribute">
+          <!--Label-->
+          <div
+            [class.handle]="
+                  formAttributeConfig &&
+                  !(
+                    formAttributeConfig.text === 'POST_ATTRIBUTE_TYPE_TITLE' ||
+                    formAttributeConfig.text === 'POST_ATTRIBUTE_TYPE_DESCRIPTION'
+                  )
+                "
+              >
+              
+              <label class="fontRobotoMedium custom-input-group-text">
+                <fa-icon
+                  [icon]="'bars'"
+                  class="mr-2"
+                  [style.opacity]="
+                    formAttributeConfig &&
+                    !(
+                      formAttributeConfig.text === 'POST_ATTRIBUTE_TYPE_TITLE' ||
+                      formAttributeConfig.text === 'POST_ATTRIBUTE_TYPE_DESCRIPTION'
+                    )
+                      ? '1'
+                      : '0'
+                  "
+                ></fa-icon>
+                {{ 'POST_ATTRIBUTE_LABEL' | translate }}
+              </label>
+            
+              <input
+              type="text"
+              class="form-control fontRobotoRegular"
+              [placeholder]="'TAG_NAME_PLACEHOLDER' | translate"
+              [(ngModel)]="formAttribute.label" />
+          </div> 
+      </div>
+      <div class="flex-column-post-attribute">
+          <!--Type-->
+          <div>
+              <div>
+                <label class="custom-input-group-text fontRobotoMedium" translate>POST_ATTRIBUTE_CONFIG</label>
+              </div>
+              <select
+                class="custom-select fontRobotoRegular"
+                [(ngModel)]="formAttributeConfig"
+                [disabled]="disabled || configDisabled"
+              >
+                <option></option>
+                <option
+                  *ngFor="let c of FormAttributeConfigs"
+                  [ngValue]="c"
+                  [disabled]="
+                    c.text === 'POST_ATTRIBUTE_TYPE_TITLE' ||
+                    c.text === 'POST_ATTRIBUTE_TYPE_DESCRIPTION' ||
+                    (c.text === 'POST_ATTRIBUTE_TYPE_LOCATION' &&
+                      locationIsAlreadyConfigured) ||
+                    (c.text === 'POST_ATTRIBUTE_TYPE_TAGS' && tagsIsAlreadyConfigured)
+                  "
+                  >{{ c.text | translate }}</option
+                >
+              </select>
+          </div> 
+      </div>
+      
+     
+     
+
+
+    <!-- <div class="input-group col-12 col-sm-6 col-md-6 col-lg-6 p-0 pr-sm-1 pr-md-1 pr-lg-1 mb-2 mb-sm-0 mb-md-0 md-lg-0">
+      <div
+        class="input-group-prepend"
+        [class.handle]="
+          formAttributeConfig &&
+          !(
+            formAttributeConfig.text === 'POST_ATTRIBUTE_TYPE_TITLE' ||
+            formAttributeConfig.text === 'POST_ATTRIBUTE_TYPE_DESCRIPTION'
+          )
+        "
+      >
+        <label class="input-group-text">
+          <fa-icon
+            [icon]="'bars'"
+            class="mr-2"
+            [style.opacity]="
+              formAttributeConfig &&
+              !(
+                formAttributeConfig.text === 'POST_ATTRIBUTE_TYPE_TITLE' ||
+                formAttributeConfig.text === 'POST_ATTRIBUTE_TYPE_DESCRIPTION'
+              )
+                ? '1'
+                : '0'
+            "
+          ></fa-icon>
+          {{ 'POST_ATTRIBUTE_LABEL' | translate }}
+        </label>
+      </div>
+      <input
+        type="text"
+        class="form-control"
+        [placeholder]="'TAG_NAME_PLACEHOLDER' | translate"
+        [(ngModel)]="formAttribute.label"
+      />
+    </div>
+    <div
+      class="input-group col-12 col-sm-6 col-md-6 col-lg-6 p-0 pl-sm-1 pl-md-1 pl-lg-1"
+    >
+      <div class="input-group-prepend">
+        <label class="input-group-text" translate>POST_ATTRIBUTE_CONFIG</label>
+      </div>
+      <select
+        class="custom-select"
+        [(ngModel)]="formAttributeConfig"
+        [disabled]="disabled || configDisabled"
+      >
+        <option></option>
+        <option
+          *ngFor="let c of FormAttributeConfigs"
+          [ngValue]="c"
+          [disabled]="
+            c.text === 'POST_ATTRIBUTE_TYPE_TITLE' ||
+            c.text === 'POST_ATTRIBUTE_TYPE_DESCRIPTION' ||
+            (c.text === 'POST_ATTRIBUTE_TYPE_LOCATION' &&
+              locationIsAlreadyConfigured) ||
+            (c.text === 'POST_ATTRIBUTE_TYPE_TAGS' && tagsIsAlreadyConfigured)
+          "
+          >{{ c.text | translate }}</option
+        >
+      </select>
+    </div> -->
+
+ </div> <!--end flex row-->
+  
+  <div *ngIf="showAdvanced">
+    <div class="row mb-2">
+      <div class="input-group p-0">
+        <div class="input-group-prepend">
+          <label class="input-group-text" translate
+            >POST_ATTRIBUTE_INSTRUCTIONS</label
+          >
+        </div>
+        <textarea
+          class="form-control"
+          [(ngModel)]="formAttribute.instructions"
+        ></textarea>
+      </div>
+    </div>
+    <div class="row mb-2" *ngIf="showOptionConfig">
+      <div class="mr-3 ml-3 w-100">
+        <div class="row mb-2">
+          <div class="btn-group" role="group">
+            <button class="btn btn-sm btn-light" (click)="onAddOption()">
+              <fa-icon [icon]="'plus'" class="mr-0"></fa-icon>
+            </button>
+            <button class="btn btn-sm btn-light">
+              {{ 'POST_ATTRIBUTE_OPTIONS' | translate }}
+            </button>
+          </div>
+        </div>
+        <div [dragula]="dragula" [(dragulaModel)]="formAttributeOptions">
+          <div
+            class="row mb-1"
+            style="padding-left: 32px;"
+            *ngFor="let option of formAttributeOptions; let i = index"
+          >
+            <div class="input-group">
+              <div class="input-group-prepend handle-option">
+                <button
+                  class="btn btn-outline-secondary"
+                  style="border-color: #ced4da; pointer-events: none;"
+                >
+                  <fa-icon [icon]="'bars'" class="m-0"></fa-icon>
+                </button>
+              </div>
+              <input
+                type="text"
+                class="form-control"
+                [(ngModel)]="option.text"
+              />
+              <div class="input-group-append">
+                <button
+                  class="btn btn-outline-danger"
+                  (click)="showOptionDeleteConfirmation = i"
+                  *ngIf="showOptionDeleteConfirmation !== i"
+                >
+                  <fa-icon [icon]="'trash'" class="mr-0"></fa-icon>
+                  {{ 'DELETE' | translate }}
+                </button>
+
+                <button
+                  class="btn btn-outline-danger"
+                  (click)="onDeleteOption(i)"
+                  *ngIf="showOptionDeleteConfirmation === i"
+                >
+                  <fa-icon [icon]="'trash'" class="mr-0"></fa-icon>
+                  {{ 'CONFIRM' | translate }}
+                </button>
+                <button
+                  class="btn btn-outline-secondary"
+                  (click)="showOptionDeleteConfirmation = null"
+                  *ngIf="showOptionDeleteConfirmation === i"
+                >
+                  <fa-icon [icon]="'times'" class="mr-0"></fa-icon>
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="row mb-2" *ngIf="showConfig">
+      <div class="mr-3 ml-3 w-100">
+        <div class="row mb-2">
+          <div class="btn-group" role="group">
+            <button class="btn btn-sm btn-light" (click)="onAddConfig()">
+              <fa-icon [icon]="'plus'" class="mr-0"></fa-icon>
+            </button>
+            <button class="btn btn-sm btn-light">
+              {{ 'POST_ATTRIBUTE_CONFIGS' | translate }}
+            </button>
+          </div>
+        </div>
+        <div>
+          <div
+            class="row mb-1"
+            style="padding-left: 32px;"
+            *ngFor="let config of formAttribute.config; let i = index"
+          >
+            <div class="input-group">
+              <select class="custom-select" [(ngModel)]="config.action">
+                <option></option>
+                <option
+                  *ngFor="let o of FormAttributeConfigActions"
+                  [ngValue]="o.action"
+                  >{{ o.text | translate }}</option
+                >
+              </select>
+
+              <div class="input-group-append">
+                <span class="input-group-text" translate
+                  >POST_ATTRIBUTE_ACTION_1</span
+                >
+              </div>
+
+              <select class="custom-select" [(ngModel)]="config.target.key">
+                <option></option>
+                <option *ngFor="let o of configTargets" [ngValue]="o.key">{{
+                  o.text | translate
+                }}</option>
+              </select>
+
+              <div class="input-group-append">
+                <span class="input-group-text" translate
+                  >POST_ATTRIBUTE_ACTION_2</span
+                >
+              </div>
+
+              <select class="custom-select" [(ngModel)]="config.target.value">
+                <option></option>
+                <option
+                  *ngFor="let o of getTargetOptions(config.target.key)"
+                  [ngValue]="o.value"
+                  >{{ o.text | translate }}</option
+                >
+              </select>
+
+              <div class="input-group-append">
+                <button
+                  class="btn btn-outline-danger"
+                  (click)="showConfigDeleteConfirmation = i"
+                  *ngIf="showConfigDeleteConfirmation !== i"
+                >
+                  <fa-icon [icon]="'trash'" class="mr-0"></fa-icon>
+                  {{ 'DELETE' | translate }}
+                </button>
+
+                <button
+                  class="btn btn-outline-danger"
+                  (click)="onDeleteConfig(i)"
+                  *ngIf="showConfigDeleteConfirmation === i"
+                >
+                  <fa-icon [icon]="'trash'" class="mr-0"></fa-icon>
+                  {{ 'CONFIRM' | translate }}
+                </button>
+                <button
+                  class="btn btn-outline-secondary"
+                  (click)="showConfigDeleteConfirmation = null"
+                  *ngIf="showConfigDeleteConfirmation === i"
+                >
+                  <fa-icon [icon]="'times'" class="mr-0"></fa-icon>
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="row justify-content-end">
+    <div class="btn-group mr-2" role="group">
+      <button
+        class="btn btn-md btn-light"
+        (click)="showAdvanced = !showAdvanced"
+      >
+        <fa-icon
+          [icon]="showAdvanced ? 'caret-up' : 'caret-down'"
+          class="mr-0 fontRobotoRegular"
+        ></fa-icon>
+        {{ 'POST_ATTRIBUTE_ADVANCED' | translate }}
+      </button>
+    </div>
+
+    <div class="btn-group mr-2" role="group">
+      <button
+        class="btn btn-md"
+        [class.btn-light]="!formAttribute.required"
+        [class.btn-warning]="formAttribute.required"
+        (click)="formAttribute.required = !formAttribute.required"
+        *ngIf="!showDeleteConfirmation"
+        [disabled]="alwaysRequired || formAttribute.config.length > 0"
+      >
+        <fa-icon [icon]="'asterisk'" class="mr-0 fontRobotoRegular"></fa-icon>
+        {{ 'REQUIRED' | translate }}
+      </button>
+    </div>
+
+    <div class="btn-group" role="group">
+      <button
+        class="btn btn-md btn-success"
+        (click)="onSaveClick()"
+        *ngIf="!showDeleteConfirmation && false"
+        [disabled]="attributeIsInvalid"
+      >
+        <fa-icon [icon]="'save'" class="mr-0 fontRobotoRegular"></fa-icon>
+        {{ 'SAVE' | translate }}
+      </button>
+      <button
+        class="btn btn-md btn-outline-danger"
+        (click)="onDeleteClick()"
+        *ngIf="!isEditing && !showDeleteConfirmation"
+        [disabled]="disabled"
+      >
+        <fa-icon [icon]="'trash'" class="mr-0"></fa-icon>
+      </button>
+
+      <button
+        class="btn btn-md btn-danger"
+        (click)="onDeleteConfirmationClick()"
+        *ngIf="showDeleteConfirmation"
+      >
+        <fa-icon [icon]="'trash'"></fa-icon>
+        {{ 'CONFIRM' | translate }}
+      </button>
+      <button
+        class="btn btn-md btn-light"
+        (click)="onCancelClick()"
+        *ngIf="isEditing || showDeleteConfirmation"
+      >
+        <fa-icon [icon]="'times'" class="mr-0"></fa-icon>
+      </button>
+    </div>
+  </div>
+
+</div>

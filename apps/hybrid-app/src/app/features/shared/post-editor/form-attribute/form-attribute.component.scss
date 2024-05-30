@@ -1,0 +1,75 @@
+.location-container {
+  display: flex;
+  gap: 3em;
+  justify-content: space-between;
+  align-items: center;
+  .location-input-container {
+    display: flex;
+    flex-direction: column;
+    gap: 1em;
+    height: 25vh;
+    .lat-lon-container {
+      gap: 2em;
+      display: flex;
+    }
+  }
+  .map-container {
+    height: 25vh;
+    border: 1px solid #ced4da;
+    border-bottom: none;
+    border-top: none;
+    border-radius: 10px;
+    min-width: 480px;
+    overflow: hidden;
+    margin: 0 auto;
+  }
+}
+
+input[type='number']::-webkit-inner-spin-button,
+input[type='number']::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+@keyframes rotation {
+  from {
+    -webkit-transform: rotate(0deg);
+    transform: rotate(0deg);
+  }
+  to {
+    -webkit-transform: rotate(359deg);
+    transform: rotate(359deg);
+  }
+}
+
+.loader {
+  animation: rotation 1s infinite linear;
+  opacity: 0.5;
+}
+
+.required {
+  display: inline;
+  font-size: 14px;
+}
+
+.pad-left-15 {
+  padding-left: 15px;
+}
+
+.radio-group-wrapper {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  gap:2.5em;
+}
+
+.radio-group-item {
+  display: flex;
+}
+
+.wrapVideoFileName {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  padding-right: 90px;
+}

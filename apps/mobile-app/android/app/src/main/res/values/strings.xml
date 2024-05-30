@@ -1,0 +1,8 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="app_name">CEICI</string>
+    <string name="title_activity_main">CEICI</string>
+    <string name="package_name">com.unicc.ceici</string>
+    <string name="fileprovider_authority">com.unicc.ceici.fileprovider</string>
+    <string name="custom_url_scheme">com.unicc.ceici</string>
+</resources>

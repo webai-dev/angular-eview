@@ -1,0 +1,210 @@
+<div *ngIf="show">
+  <!-- Title. -->
+  <!-- Varchar. -->
+  <!-- Select. -->
+  <!-- Radio. -->
+  <!-- Checkbox. -->
+  <div class="mb-3" *ngIf="
+      FormAttribute.type === FormAttributeType.Title ||
+      FormAttribute.type === FormAttributeType.Varchar
+    "
+  >
+    <label class="fontRobotoMedium" [style.fontSize]="FormAttribute.input === FormAttributeInput.Select || FormAttribute.input === FormAttributeInput.Video ? '16px' : '16px'" [style.fontWeight]="FormAttribute.required ? 'bold' : 'unset'"
+      >{{ FormAttribute.label | translate }}
+      <div class="required fontRobotoMedium" *ngIf="FormAttribute.required">
+        - {{ 'REQUIRED' | translate }}
+      </div>
+    </label>
+    <div class="input-group" *ngIf="
+        FormAttribute.input === FormAttributeInput.Text ||
+        FormAttribute.input === FormAttributeInput.Select ||
+        FormAttribute.input === FormAttributeInput.Video
+      ">
+      <input type="text" class="form-control" [placeholder]="FormAttribute.instructions || ''" [(ngModel)]="value"
+        (change)="onValueChange()" *ngIf="
+          FormAttribute.input === FormAttributeInput.Text ||
+          FormAttribute.input === FormAttributeInput.Video
+        " />
+      <select class="custom-select" [(ngModel)]="value" (change)="onValueChange()"
+        *ngIf="FormAttribute.input === FormAttributeInput.Select">
+        <option *ngFor="let option of FormAttribute.options" [value]="option">{{
+          option | translate
+        }}</option>
+      </select>
+    </div>
+    <div class="radio-group-wrapper" *ngIf="FormAttribute.input === FormAttributeInput.Radio">
+      <div
+        class="radio-group-item"
+        *ngFor="let option of FormAttribute.options">
+        <!-- <div> -->
+        <div>
+          <input name="radio_group_{{ FormAttribute.id }}" type="radio" [(ngModel)]="value" (change)="onValueChange()"
+            [value]="option" />
+          <label class="pad-left-15 font-size-14 fontRobotoRegular">{{
+            option
+          }}</label>
+        </div>
+      </div>
+    </div>
+    <div *ngIf="FormAttribute.input === FormAttributeInput.Checkbox">
+      <div class="input-group mb-1" *ngFor="let option of FormAttribute.options; let i = index">
+        <div class="input-group-prepend">
+          <div class="input-group-text">
+            <input type="checkbox" [(ngModel)]="selectedValues[i]" (change)="onValueChange()" [value]="option" />
+          </div>
+        </div>
+        <input type="text" class="form-control" [value]="option" readonly />
+      </div>
+    </div>
+  </div>
+
+  <!-- Description. -->
+  <!-- Text. -->
+  <div class="mb-3" *ngIf="
+      FormAttribute.type === FormAttributeType.Description ||
+      FormAttribute.type === FormAttributeType.Text
+    ">
+    <label class="fontRobotoMedium"
+      [style.fontWeight]="FormAttribute.required ? 'bold' : 'unset'">{{ FormAttribute.label | translate }}
+      <div class="required" *ngIf="FormAttribute.required">
+        - {{ 'REQUIRED' | translate }}
+      </div>
+    </label>
+    <div class="input-group">
+      <textarea class="form-control" [placeholder]="FormAttribute.instructions || ''" [(ngModel)]="value"
+        (change)="onValueChange()"></textarea>
+    </div>
+  </div>
+
+  <!-- Tags. -->
+  <div *ngIf="
+      FormAttribute.type === FormAttributeType.Tags &&
+      ((availableTags$ | async) ||
+        (!(availableTags$ | async) && FormAttribute.required))
+    " class="mb-3">
+    <label class="fontRobotoMedium font-size-16"
+      [style.fontWeight]="FormAttribute.required ? 'bold' : 'unset'">{{ FormAttribute.label | translate }}
+      <div class="required" *ngIf="FormAttribute.required">
+        - {{ 'REQUIRED' | translate }}
+      </div>
+    </label>
+    <p *ngIf="(availableTags$ | async).length === 0">
+      {{ 'SUBMIT_NO_TAGS' | translate }}
+    </p>
+    <div class="input-group">
+      <eview-tag-selector [nestedTags]="nestedTags$ | async"></eview-tag-selector>
+    </div>
+  </div>
+
+  <!-- Location. -->
+  <div *ngIf="FormAttribute.type === FormAttributeType.Point" class="flex-item-location mb-3">
+    
+    <div class="location-container">
+      <div style="height: 25vh;">
+      <label class="fontRobotoMedium" [style.fontWeight]="FormAttribute.required ? 'bold' : 'unset'"
+      >{{ FormAttribute.label | translate }}
+      <div class="required" *ngIf="FormAttribute.required">
+        - {{ 'REQUIRED' | translate }}
+      </div>
+    </label>
+          <!--Search address-->
+      <div class="location-input-container">
+        <div class="input-group">
+          <input id="search-by-address" type="text" class="form-control" (selectItem)="onValueSelected($event)"
+            [resultFormatter]="formatter" [inputFormatter]="formatter" [(ngModel)]="model" [ngbTypeahead]="search"
+            [class.is-invalid]="searchFailed" placeholder="{{ 'SEARCH' | translate }}" [editable]="false" />
+          <div class="input-group-append">
+            <span class="input-group-text text-center" style="min-width: 36px;">
+              <fa-icon [icon]="'spinner'" class="loader" *ngIf="isSearchingByAddress"></fa-icon>
+              <fa-icon [icon]="'times'" *ngIf="noResultsFromAddress"></fa-icon>
+            </span>
+          </div>
+        </div>
+        <!--Latitude /longitude-->
+        <div class="lat-lon-container">
+          <input type="number" class="form-control" [(ngModel)]="value.lat" placeholder="{{ 'LATITUDE' | translate }}"
+            (change)="onValueChange()" />
+          <input type="number" class="form-control" [(ngModel)]="value.lon" placeholder="{{ 'LONGITUDE' | translate }}"
+            (change)="onValueChange()" [style.borderTopRightRadius]="FormAttribute.required ? 4 : 0" />
+        </div>
+      </div>
+      </div>
+      <!--Map-->
+      <div class="map-container">
+        <eview-map [mapId]="'post-create-map'"></eview-map>
+      </div>
+    </div>
+  </div>
+
+  <!-- Decimal. -->
+  <!-- Int. -->
+  <div class="mb-3" *ngIf="
+      FormAttribute.type === FormAttributeType.Decimal ||
+      FormAttribute.type === FormAttributeType.Int
+    ">
+    <label class="fontRobotoMedium font-size-16" [style.fontWeight]="FormAttribute.required ? 'bold' : 'unset'">{{ FormAttribute.label | translate }}
+      <div class="required" *ngIf="FormAttribute.required">
+        - {{ 'REQUIRED' | translate }}
+      </div>
+    </label>
+    <div class="input-group">
+      <input type="number" class="form-control" [(ngModel)]="value" (change)="onValueChange()" />
+    </div>
+  </div>
+
+  <!-- Date. -->
+  <!-- DateTime. -->
+  <div *ngIf="FormAttribute.type === FormAttributeType.DateTime" class="mb-3">
+    <label class="fontRobotoMedium"
+      [style.fontWeight]="FormAttribute.required ? 'bold' : 'unset'">{{ FormAttribute.label | translate }}
+      <div class="required" *ngIf="FormAttribute.required">
+        - {{ 'REQUIRED' | translate }}
+      </div>
+    </label>
+    <div class="input-group mb-3">
+      <input class="form-control" [(ngModel)]="value.date" (ngModelChange)="onValueChange()" ngbDatepicker
+        #datePicker="ngbDatepicker" />
+      <div class="input-group-append">
+        <button class="btn btn-outline-secondary"
+          style="border-top-right-radius: 4px !important; border-bottom-right-radius: 4px;"
+          (click)="datePicker.toggle()" type="button">
+          <fa-icon [icon]="'calendar-alt'"></fa-icon>
+        </button>
+      </div>
+      <ngb-timepicker [(ngModel)]="value.time" (ngModelChange)="onValueChange()"
+        *ngIf="FormAttribute.input === FormAttributeInput.DateTime" [spinners]="OFF" class="ml-3"></ngb-timepicker>
+    </div>
+  </div>
+
+  <!-- Media. -->
+  <div *ngIf="FormAttribute.type === FormAttributeType.Media" class="mb-3">
+    <label class="fontRobotoMedium font-size-16"
+      [style.fontWeight]="FormAttribute.required ? 'bold' : 'unset'">{{ FormAttribute.label | translate }}
+      <div class="required" *ngIf="FormAttribute.required">
+        - {{ 'REQUIRED' | translate }}
+      </div>
+    </label>
+    <div class="input-group mb-3">
+      <div class="custom-file">
+        <input type="file" class="custom-file-input" (change)="onMediaSelect($event)" />
+        <label class="custom-file-label wrapVideoFileName">{{
+          (this.value && this.value.name | translate) || ''
+        }}</label>
+      </div>
+      <div class="input-group-append">
+        <button class="btn btn-md btn-danger" (click)="onDeleteConfirmationClick(); showDeleteConfirmation = false"
+          *ngIf="showDeleteConfirmation">
+          <fa-icon [icon]="'trash'"></fa-icon>
+          {{ 'CONFIRM' | translate }}
+        </button>
+        <button class="btn btn-md btn-light" (click)="showDeleteConfirmation = false" *ngIf="showDeleteConfirmation">
+          <fa-icon [icon]="'times'" class="mr-0"></fa-icon>
+        </button>
+        <button *ngIf="!showDeleteConfirmation" class="btn input-group-text text-center"
+          [disabled]="!(this.value && this.value.name)" (click)="showDeleteConfirmation = true">
+          <fa-icon [icon]="'minus'" class="mr-0"></fa-icon>
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

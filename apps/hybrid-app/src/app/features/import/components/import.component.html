@@ -1,0 +1,26 @@
+<div>
+    
+    <div class="modal-header marg-left-1">
+        <h4 class="modal-title" id="modal-basic-title">{{ 'IMPORT' |translate}}</h4>
+        <button type="button" class="close" aria-label="Close" (click)="modalFileClose('Cross click')">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+
+    <div class="pad-2 flex-file-input-container">
+        <div class="file-input-wrapper">
+            <label>
+                <input class="border-none" (change)="fileChange($event)" type="file" accept=".csv" />
+            </label>
+        </div>
+    </div>
+    <!-- <div class="pad-1"><small class="ml-3 text-danger form-text text-muted">{{'INFORMATIVE_TEXT_CSV_UPLOAD' | translate}}</small></div> -->
+    <div class="pad-1 file-upload-btn-container">
+        <button class="btn btn-md btn-outline-primary" (click)="uploadFile()">
+            <span class="text-underline font-size-12 fontRobotoRegular d-md-inline d-lg-inline d-xl-inline ml-1">{{
+    'FILE_IMPORT' | translate
+}}</span>
+        </button>
+    </div>
+    
+</div>

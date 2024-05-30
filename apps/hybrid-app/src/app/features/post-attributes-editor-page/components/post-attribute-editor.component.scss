@@ -1,0 +1,21 @@
+.flex-post-attribute {
+  display: flex;
+  flex-grow: 1;
+  margin-left: 0.5em;
+}
+
+.flex-column-post-attribute {
+  display: flex;
+  flex-direction: column;
+  flex-wrap: wrap;
+  flex-grow: 1;
+}
+
+.flex-gap-1 {
+  gap: 1em;
+}
+
+.pad-1 {
+  padding:1.5em;
+}
+

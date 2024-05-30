@@ -1,0 +1,105 @@
+<div class="m-3" style="margin-top: 0 !important;">
+  <div class="row" *ngIf="tag.id !== -1">
+    <div class="input-group">
+      <!-- <div class="input-group-prepend handle">
+        <button class="btn btn-outline btn-bullet" type="button">
+          <fa-icon
+            [icon]="'circle'"
+            style="font-size: 10px; margin-right: 0;"
+          ></fa-icon>
+        </button>
+      </div> -->
+      <input
+        type="text"
+        class="form-control fontRobotoMedium"
+        [placeholder]="'TAG_NAME_PLACEHOLDER' | translate"
+        [(ngModel)]="tag.tag"
+        [disabled]="!isEditing"
+      />
+      <div class="btn-group input-group-append" role="group">
+        <button
+          style="width:40px;"
+          [cpOutputFormat]="'hex'"
+          [cpDisabled]="!isEditing && !showDeleteConfirmation"
+          [cpAlphaChannel]="'disabled'"
+          [cpPosition]="'bottom-left'"
+          [style.background]="tag.color ? tag.color : color"
+          [(colorPicker)]="color"
+          (colorPickerChange)="onColorCodeChange($event)"
+          class="btn btn-md btn-light"
+        ></button>
+        <button
+          [iconPicker]="tag.icon"
+          style="width:40px;"
+          [ipWidth]="'200px'"
+          [ipIconPack]="['fa']"
+          [disabled]="!isEditing && !showDeleteConfirmation"
+          [ipPosition]="'left'"
+          [ipPlaceHolder]="'Choose an icon'"
+          [ipFallbackIcon]="fallbackIcon"
+          (iconPickerSelect)="onIconPickerSelect($event)"
+          class="btn btn-md btn-light"
+        >
+          <span class="mr-0"
+            ><i class="{{ icon }}" aria-hidden="true"></i
+          ></span>
+        </button>
+        <button
+          class="btn btn-md btn-light"
+          (click)="onEditClick()"
+          *ngIf="!isEditing && !showDeleteConfirmation"
+        >
+          <fa-icon [icon]="'pen'" class="mr-0"></fa-icon>
+        </button>
+        <button
+          class="btn btn-md btn-light"
+          (click)="onAddClick()"
+          *ngIf="!isEditing && !showDeleteConfirmation"
+        >
+          <fa-icon [icon]="'plus'" class="mr-0"></fa-icon>
+        </button>
+        <button
+          class="btn btn-md btn-outline-danger"
+          (click)="onDeleteClick()"
+          *ngIf="!isEditing && !showDeleteConfirmation"
+        >
+          <fa-icon [icon]="'trash'" class="mr-0"></fa-icon>
+        </button>
+        <button
+          class="btn btn-md btn-outline-danger"
+          (click)="onDeleteConfirmationClick()"
+          *ngIf="showDeleteConfirmation"
+        >
+          <fa-icon [icon]="'trash'"></fa-icon>
+          {{ 'CONFIRM' | translate }}
+        </button>
+        <button
+          class="btn btn-md btn-success"
+          (click)="onSaveClick()"
+          *ngIf="isEditing"
+          [disabled]="tagIsInvalid"
+        >
+          <fa-icon [icon]="'save'" class="mr-0"></fa-icon>
+        </button>
+        <button
+          class="btn btn-md btn-light"
+          (click)="onCancelClick()"
+          *ngIf="isEditing || showDeleteConfirmation"
+        >
+          <fa-icon [icon]="'times'" class="mr-0"></fa-icon>
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+<div
+  style="margin-top: 0 !important; margin-right: 0 !important; padding-left: 36px !important;"
+  *ngIf="tag.children.length"
+>
+  <div>
+    <eview-tag-editor
+      *ngFor="let tag of tag.children"
+      [tag]="tag"
+    ></eview-tag-editor>
+  </div>
+</div>

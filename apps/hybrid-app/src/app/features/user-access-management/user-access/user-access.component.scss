@@ -1,0 +1,35 @@
+
+input[type='checkbox'] {
+  cursor: pointer;
+}
+
+.table .thead-dark th {
+  width: 70px;
+}
+
+ul, li {
+  &.nav-item {
+    font-weight: bold;
+  }
+}
+
+
+.flex-access-mgmt-wrapper {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  margin-top: 2.5em;
+  margin-right: 1em;
+  align-items: center;
+  max-width: 100%;
+}
+
+.access-mgmt-text {
+  font-size: 24px;
+}
+
+.table .thead-dark th {
+  color: #fff;
+  background-color: #4282c2;
+  border:none !important;
+}

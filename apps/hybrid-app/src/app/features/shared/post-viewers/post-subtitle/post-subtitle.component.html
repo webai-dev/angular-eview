@@ -1,0 +1,91 @@
+  <div class="row card-subtitle flex-subtitle-wrapper">
+    <!-- <div class="mr-3">
+      <span class="font-weight-bold">{{'ID'| translate }} </span>{{post.id}}
+    </div> -->
+    <div class="user-circle flex-subtitle fontRobotoRegular">
+      <img src="/assets/images/icon_account.svg" />
+      <div class="fontRobotoRegular"> {{ post.author_realname }} </div>
+    </div>
+    <div class="flex-subtitle fontRobotoRegular">
+      <img src="/assets/images/icon_map_pin.svg" />
+      <div class="fontRobotoRegular"> {{ managementLevels | arrayTostringJoin: ' - ' }} </div>
+    </div>
+    <div class="report-date flex-subtitle fontRobotoRegular">
+      <img src="/assets/images/icon_schedule.svg" />
+      <div class="fontRobotoRegular"> {{ PostHelpers.FormatDate(post, 'created', format.dateTime) }} </div>
+    </div>  
+    <!-- <div class="btn-status ml-4" ngClass="{{PostHelpers.FormatStatus(post) | translate}}">
+        {{PostHelpers.FormatStatus(post) | translate}}
+    </div>
+    <div class="btn-status mgmt-level-border" >
+      {{ PostHelpers.FormatMgmtLev(post) | translate }}
+    </div> -->
+  </div>
+  <div class="row card-subtitle mt-4 col-12 flex-bottom-wrapper">
+    <!-- <div class="mr-3" style="margin-left: -3px;">
+      <img width="24" height="24" src="/assets/images/map-marker.svg" />
+      {{ managementLevels | arrayTostringJoin: ' - ' }}
+    </div>
+    <div class="report-date">
+      <img width="24" height="24" src="/assets/images/clock-three.svg" />
+        {{ PostHelpers.FormatDate(post, 'created', format.dateTime) }}
+    </div>   -->
+    <div class="flex-bottom-item-grow-1 vertical-line">
+      <div class="fontRobotoMedium">
+        {{'POST_STATUS' | translate}}
+      </div>
+      <div class="flex-status-wrapper">
+          <!-- <div class="status-dot"></div> -->
+          <div class="icon-status Pending fontRobotoRegular">
+            <span class="status-dot"></span>{{PostHelpers.FormatStatus(post) | translate}}</div>
+      </div>
+      <!-- <span class="vertical-bar"></span> -->
+    </div>
+    <div class="flex-bottom-item-grow-1 vertical-line">
+      <div class="fontRobotoMedium">
+        {{'POST_LEVEL' | translate}}
+      </div>
+      <div class="flex-status-wrapper">
+        <div class="icon-status mgmt-level-border fontRobotoRegular">
+          <span class="level-dot"></span>{{ PostHelpers.FormatMgmtLev(post) | translate }}
+        </div>
+      </div>
+      <!-- <span class="vertical-bar"></span> -->
+    </div>
+    <!--Linked reports-->
+    <div class="flex-bottom-item">    
+      <div class="fontRobotoMedium">
+       {{ 'NO_LINKED_POSTS_SUFFIX' | translate }}
+      </div>
+      <div (click)="onShowLinkedClick(post)" *ngIf="post.linked_posts > 0 && !disableLinkPost" class="mgmt-level-border cursor-pointer fontRobotoRegular marg-top-7">
+        +{{ post.linked_posts }} 
+      </div>
+      <div *ngIf="post.linked_posts > 0 && disableLinkPost" class="mgmt-level-border fontRobotoRegular marg-top-7">
+        +{{ post.linked_posts }} 
+      </div>
+      <div *ngIf="post.linked_posts === 0" class="mgmt-level-border fontRobotoRegular marg-top-7">
+        {{ post.linked_posts }}
+      </div>
+    </div>
+
+      <!-- <button
+        class="btn btn-sm btn-light linked-posts"
+        (click)="onShowLinkedClick(post)"
+        *ngIf="post.linked_posts > 0"
+        >
+        <img src="/assets/images/file-copy-alt.svg" />
+        +{{ post.linked_posts }} {{ 'NO_LINKED_POSTS_SUFFIX' | translate }}
+      </button> -->
+      <!-- <div class="priority"
+        *ngIf="PostPriority && (post.priority === PostPriority.Urgent)">
+      <img width="30" height="30" class="float-right" src="/assets/images/exclamation-triangle-dark.svg" />
+      </div> -->
+    
+  </div>
+
+  <div class="row flex-priority-wrapper">
+    <div class="priority marg-right-priority-icon"
+      *ngIf="PostPriority && (post.priority === PostPriority.Urgent)">
+    <img width="30" height="30"  src="/assets/images/exclamation-triangle-dark.svg" />
+    </div>
+  </div>

@@ -1,0 +1,74 @@
+<div class="m-3 mt-4" *ngIf="formAttributesEx">
+  <div class="mb-3" *ngIf="isEditing">
+    <h6 class="mb-2 text-muted">
+      <span class="mr-2"> {{ 'POST_ID' | translate }} {{ post.id }} </span>
+      <span class="mr-2">
+        <fa-icon [icon]="'inbox'"></fa-icon>
+        {{ PostHelpers.FormatSource(post) | translate }}</span
+      >
+      <span class="mr-2">
+        <fa-icon [icon]="'calendar'"></fa-icon>
+        {{ PostHelpers.FormatDate(post, 'created', format.dateTime) }}</span
+      >
+      <span class="mr-2">
+        <fa-icon [icon]="'user-circle'"></fa-icon>
+        {{ UsersHelpers.FormatUserRealname(user$ | async) || '?' }}</span
+      >
+      <span class="mr-2">
+        <fa-icon
+          [icon]="'check-square'"
+          [style.opacity]="post.status === PostStatus.Published ? '1' : '0.25'"
+        ></fa-icon>
+        {{ PostHelpers.FormatStatus(post) | translate }}</span
+      >
+    </h6>
+  </div>
+  <eview-form-attribute
+    *ngFor="let fa of formAttributesEx.results"
+    [FormAttribute]="fa"
+  ></eview-form-attribute>
+  <div class="row pl-3 pr-3 justify-content-end">
+    <button
+      class="btn btn-md btn-light mr-1"
+      type="button"
+      (click)="onCancelClick()"
+      *ngIf="isEditing"
+      translate
+    >
+      CANCEL
+    </button>
+    <button
+      class="btn btn-md mr-1"
+      type="button"
+      (click)="onChangeStatusClick()"
+      *ngIf="isEditing"
+      [class.btn-light]="isFormInvalid()"
+      [class.btn-primary]="!isFormInvalid()"
+      [disabled]="
+        isFormInvalid() ||
+        !AuthHelpers.Resources.HasPriviledgeOn(
+          post,
+          AllowedPriviledge.ChangeStatus
+        )
+      "
+      translate
+    >
+      {{
+        post.status === PostStatus.Published
+          ? 'POST_UPDATE_AND_UNDER_REVIEW'
+          : 'POST_UPDATE_AND_PUBLISH'
+      }}
+    </button>
+    <button
+      class="btn btn-md"
+      type="button"
+      (click)="onSubmitClick()"
+      [class.btn-light]="isFormInvalid()"
+      [class.btn-primary]="!isFormInvalid()"
+      [disabled]="isFormInvalid()"
+      translate
+    >
+      {{ isEditing ? 'UPDATE' : 'SUBMIT' }}
+    </button>
+  </div>
+</div>

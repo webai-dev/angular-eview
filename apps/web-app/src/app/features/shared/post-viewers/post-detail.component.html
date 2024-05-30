@@ -1,0 +1,116 @@
+<div class="card-body p-0" *ngIf="post">
+  <h5 class="card-title text-truncate" style="padding-right: 16px;">
+    {{ post.title }}
+  </h5>
+  <eview-post-subtitle [post]="post"></eview-post-subtitle>
+  <div class="btn-group mb-2" role="group">
+    <button
+      class="btn btn-sm btn-primary"
+      (click)="onChangeStatusClick()"
+      *ngIf="
+        AuthHelpers.Resources.HasPriviledgeOn(
+          post,
+          AllowedPriviledge.ChangeStatus
+        )
+      "
+    >
+      <fa-icon [icon]="'redo-alt'" class="m-0"></fa-icon>
+      {{ 'POST_CHANGE_STATUS' | translate }}
+    </button>
+    <button
+      class="btn btn-sm btn-light"
+      (click)="onEditClick()"
+      *ngIf="
+        AuthHelpers.Resources.HasPriviledgeOn(post, AllowedPriviledge.Update)
+      "
+    >
+      <fa-icon [icon]="'pen'" class="m-0"></fa-icon>
+    </button>
+    <button
+      class="btn btn-sm btn-danger"
+      (click)="onDeleteClick()"
+      *ngIf="
+        AuthHelpers.Resources.HasPriviledgeOn(post, AllowedPriviledge.Delete) &&
+        !showDeleteConfirmation
+      "
+    >
+      <fa-icon [icon]="'trash'" class="m-0"></fa-icon>
+    </button>
+    <button
+      class="btn btn-sm btn-danger"
+      (click)="onDeleteConfirmationClick()"
+      *ngIf="
+        AuthHelpers.Resources.HasPriviledgeOn(post, AllowedPriviledge.Delete) &&
+        showDeleteConfirmation
+      "
+    >
+      <fa-icon [icon]="'trash'" class=""></fa-icon> {{ 'CONFIRM' | translate }}
+    </button>
+  </div>
+  <p class="card-text">
+    {{ post.content }}
+  </p>
+  <div class="value mb-3" *ngFor="let value of post.values">
+    <span class="label">{{ value.label | translate }}</span>
+    <span class="instructions">{{ value.instructions | translate }}</span>
+    <div *ngIf="value.type === FormAttributeType.Tags">
+      <span
+        class="badge badge-secondary mb-1"
+        *ngFor="let tag of value.value"
+        >{{ tag.tag | translate }}</span
+      >
+    </div>
+    <div
+      *ngIf="
+        value.type === FormAttributeType.Varchar &&
+        (value.input === FormAttributeInput.Select ||
+          value.input === FormAttributeInput.Radio ||
+          value.input === FormAttributeInput.Checkbox)
+      "
+    >
+      <span
+        class="badge badge-secondary mb-1"
+        *ngFor="let option of value.value"
+        >{{ option | translate }}</span
+      >
+    </div>
+    <span
+      class="scalar"
+      *ngIf="
+        value.input === FormAttributeInput.Text ||
+        value.input === FormAttributeInput.TextArea ||
+        value.input === FormAttributeInput.Number ||
+        value.input === FormAttributeInput.Date ||
+        value.input === FormAttributeInput.DateTime
+      "
+      >{{ value.value[0] }}</span
+    >
+    <img
+      class="scalar"
+      *ngIf="value.type === FormAttributeType.Media"
+      [src]="(value.value[0] | async) || ''"
+    />
+    <a
+      [href]="value.value[0]"
+      target="blank"
+      *ngIf="value.input === FormAttributeInput.Video"
+      >{{ value.value[0] }}</a
+    >
+    <div
+      class="map-container"
+      *ngIf="value.input === FormAttributeInput.Location && !hideLocationMap"
+    >
+      <eview-map [disabled]="true" [marker]="value.value[0]"></eview-map>
+    </div>
+    <span
+      class="scalar"
+      *ngIf="value.input === FormAttributeInput.Location && hideLocationMap"
+      >{{ 'LATITUDE' | translate }} {{ value.value[0].lat }}</span
+    >
+    <span
+      class="scalar"
+      *ngIf="value.input === FormAttributeInput.Location && hideLocationMap"
+      >{{ 'LONGITUDE' | translate }} {{ value.value[0].lon }}</span
+    >
+  </div>
+</div>

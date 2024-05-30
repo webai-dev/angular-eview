@@ -1,0 +1,11 @@
+<div class="card mb-3" [class.active]="active$ | async" (click)="onClick()">
+  <div class="card-body">
+    <h5 class="card-title">
+      {{ post.title }}
+    </h5>
+    <eview-post-subtitle [post]="post"></eview-post-subtitle>
+    <p class="card-text" *ngIf="!post.parent">
+      {{ post.content }}
+    </p>
+  </div>
+</div>

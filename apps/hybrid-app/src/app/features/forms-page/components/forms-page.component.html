@@ -1,0 +1,180 @@
+  <div class="m-3 mt-4">
+    <div class="row pl-3 pr-3 mb-3 justify-content-end">
+      <div class="input-group">
+        <label class="fontRobotoBold header-text">
+          {{ 'FORMS_MANAGEMENT' | translate  }}
+        </label>
+      </div>
+      <div class="btn-group" role="group">
+        <button class="btn btn-md btn-outline-success marg-right-0" (click)="onAddFormClick(formaddedit)">
+          <fa-icon [icon]="'plus'" class="mr-0"></fa-icon>
+        </button>
+        <button class="btn btn-md btn-light" (click)="loadForms()">
+          <fa-icon [icon]="'redo-alt'" class="mr-0"></fa-icon>
+          <span class="d-none d-md-inline d-lg-inline d-xl-inline ml-1">{{
+            'REFRESH' | translate
+          }}</span>
+        </button>
+      </div>
+    </div>
+    
+  <p *ngIf="forms && forms.count === 0">
+    {{ 'NO_RECORDS' | translate }}
+  </p>
+  <div *ngIf="forms && forms.count > 0">
+    <div
+      class="card mb-2"
+      *ngFor="let form of forms.results; index as i"
+      [style.display]="form.id !== -1 ? 'auto' : 'none'"
+      style="border: none;"
+    >
+      <div class="card-body p-0" style="padding-bottom: 0 !important;">
+        <div class="m-3" style="margin-top: 0 !important;">
+          <div class="row" *ngIf="form.id !== -1">
+            <div class="input-group">
+              <input
+                type="text"
+                class="form-control fontRobotoMedium"
+                [placeholder]="'TAG_NAME_PLACEHOLDER' | translate"
+                [(ngModel)]="form.name"
+                [disabled]="!isEditing"
+              />
+              <div class="pad-2 flex-btn-group-wrapper value">
+                  <!-- <div class="flex-btn-group"><span class="label fontRobotoMedium">{{ 'PRIORITY_LABEL' | translate }}</span></div> -->
+                  <div class="flex-btn-group">
+                  <ui-switch
+                    style="margin-left: 10px"
+                    color="#ffc107"
+                    [checked]="form && (form.disabled === false)"
+                    defaultBoColor="lightgrey"
+                    defaultBgColor="lightgrey"
+                    switchColor="#fff"
+                    [disabled]="false"
+                    (change)="onEnableDisableClick(form, $event)"
+                  ></ui-switch></div>
+              </div>
+              <div class="btn-group input-group-append float-right" role="group">
+                <button
+                  class="btn btn-md btn-outline"
+                  (click)="onFormEditClick(formaddedit, i)"
+                  *ngIf="i !== selectedId"
+                >
+                  <fa-icon [icon]="'pen'" class="mr-0"></fa-icon>
+                </button>
+                <button
+                  class="btn btn-md btn-light"
+                  (click)="onAddFieldsClick(form.id)"
+                  title="Add Fields"
+                >
+                  <fa-icon [icon]="'columns'" class="mr-0"></fa-icon>
+                </button>
+                <button
+                  class="btn btn-md btn-outline-danger"
+                  (click)="onDeleteClick(i)"
+                  *ngIf="i !== selectedId"
+                >
+                  <fa-icon [icon]="'trash'" class="mr-0"></fa-icon>
+                </button>
+                <button
+                  class="btn btn-md btn-outline-danger"
+                  (click)="onDeleteConfirmationClick(form.id)"
+                  *ngIf="i === selectedId"
+                >
+                  <fa-icon [icon]="'trash'"></fa-icon>
+                  {{ 'CONFIRM' | translate }}
+                </button>
+                <button
+                  class="btn btn-md btn-light"
+                  (click)="onCancelClick()"
+                  *ngIf="i === selectedId"
+                  (click)="selectedId = -1"
+                >
+                  <fa-icon [icon]="'times'" class="mr-0"></fa-icon>
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<ng-template #formaddedit let-modal>
+  <div class="modal-body">
+    <div class="mb-4">
+      <button
+        type="button"
+        class="close"
+        aria-label="Close"
+        (click)="modal.dismiss('Cross click'); isEditing = false;"
+      >
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </div>
+    <form [formGroup]="surveyForm" class="ml-3 mr-3">
+      <div class="mb-2 fontRobotoBold" translate>
+        {{ isEditing ? 'FORM_EDIT' : 'FORM_ADD' }}
+      </div>
+      <div class="row col-md-12 col-sm-12 p-0">
+        <div class="input-group mb-2">
+          <div>
+            <label class="fontRobotoMedium custom-input-group-text">{{
+              'FORM_NAME' | translate
+            }}</label>
+          </div>
+          <input
+            type="text"
+            class="form-control"
+            formControlName="name"
+            [placeholder]="'FORM_NAME' | translate"
+          />
+        </div>
+        <div class="input-group mb-2">
+          <div>
+            <label class="fontRobotoMedium custom-input-group-text">{{ 'FORM_DESC' | translate }}</label>
+          </div>
+          <input
+            type="text"
+            class="form-control"
+            formControlName="description"
+            [placeholder]="'FORM_DESC' | translate"
+          />
+        </div>
+        <div class="input-group mb-2">
+          <div>
+            <label class="fontRobotoMedium custom-input-group-text">{{ 'FORM_TYPE' | translate }}</label>
+          </div>
+          <input
+            type="text"
+            class="form-control"
+            formControlName="type"
+            [placeholder]="'FORM_TYPE' | translate"
+          />
+        </div>
+        <div class="d-flex justify-content-end">
+          <button
+            class="btn fontRobotoMedium btn-md btn-outline mr-2 cursor-pointer"
+            type="button"
+            (click)="onCancelClick(); modal.close()"
+            *ngIf="isEditing"
+            translate
+          >
+            CANCEL
+          </button>
+          <button
+            class="btn fontRobotoMedium btn-outline-primary btn-md cursor-pointer"
+            type="button"
+            (click)="onSubmitClick()"
+            [class.btn-light]="surveyForm.valid"
+            [class.btn-primary]="!surveyForm.valid"
+            [disabled]="!surveyForm.valid"
+            translate
+          >
+            <fa-icon [icon]="'save'"></fa-icon>
+            {{ isEditing ? 'UPDATE' : 'SUBMIT' }}
+          </button>
+        </div>
+      </div>
+    </form>
+  </div>
+</ng-template>

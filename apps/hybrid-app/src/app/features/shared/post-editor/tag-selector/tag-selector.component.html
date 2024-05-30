@@ -1,0 +1,8 @@
+<select class="custom-select" [ngClass]="{'max-width-select': isFilter}" style="padding: .5rem;" [(ngModel)]="tag" (change)="onChange()">
+  <option selected value="-1">Choose...</option>
+  <option *ngFor="let t of nestedTags" [ngValue]="t">{{ t.tag }}</option>
+</select>
+<eview-tag-selector
+  *ngIf="tag && tag.children && tag.children.length > 0"
+  [nestedTags]="tag.children"
+></eview-tag-selector>

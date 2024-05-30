@@ -1,0 +1,35 @@
+{
+  "compileOnSave": false,
+  "compilerOptions": {
+    "rootDir": ".",
+    "sourceMap": true,
+    "declaration": false,
+    "moduleResolution": "node",
+    "emitDecoratorMetadata": true,
+    "experimentalDecorators": true,
+    "importHelpers": true,
+    "target": "es5",
+    "module": "esnext",
+    "typeRoots": ["node_modules/@types"],
+    "lib": ["es2017", "dom"],
+    "skipLibCheck": true,
+    "skipDefaultLibCheck": true,
+    "baseUrl": ".",
+    "resolveJsonModule": true,
+    "paths": {
+      "*": ["./node_modules/*"],
+      "@eview/*": ["libs/*"],
+      "@eview/web": ["xplat/web/index.ts"],
+      "@eview/web/*": ["xplat/web/*"],
+      "@eview/ionic": ["xplat/ionic/index.ts"],
+      "@eview/ionic/*": ["xplat/ionic/*"],
+      "jszip": [
+        "node_modules/jszip/dist/jszip.min.js"
+      ]
+    },
+    //"esModuleInterop": true,
+    "downlevelIteration": true
+  },
+  
+  "exclude": ["node_modules", "tmp"]
+}

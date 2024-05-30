@@ -1,0 +1,21 @@
+{
+  "defaultProject": "hybrid-app",
+  "projects": {
+    "mobile-app": {
+      "name": "mobile-app",
+      "integrations": {
+        "capacitor": {}
+      },
+      "type": "angular",
+      "root": "apps/mobile-app"
+    },
+    "hybrid-app": {
+      "name": "hybrid-app",
+      "integrations": {
+        "capacitor": {}
+      },
+      "type": "angular",
+      "root": "apps/hybrid-app"
+    }
+  }
+}

@@ -1,0 +1,20 @@
+<div style="width: 400px;">
+  <div class="input-group">
+    <div class="mr-3 mt-1">
+      <label class="fontRobotoMedium custom-input-group-text">{{
+        'CHOOSE_FORM' | translate
+      }}</label>
+    </div>
+    <select
+      class="custom-select"
+      *ngIf="formList && formList.length > 0"
+      (change)="onFormChange()"
+      [(ngModel)]="selectedFormId"
+    >
+      <option>{{ 'SELECT' | translate }}</option>
+      <option *ngFor="let form of formList" [ngValue]="form.id">
+        {{ form.name }}
+      </option>
+    </select>
+  </div>
+</div>

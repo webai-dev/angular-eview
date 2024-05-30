@@ -1,0 +1,30 @@
+{
+  "npmScope": "eview",
+  "implicitDependencies": {
+    "angular.json": "*",
+    "package.json": "*",
+    "tsconfig.json": "*",
+    "tslint.json": "*",
+    "nx.json": "*"
+  },
+  "projects": {
+    "libs": {
+      "tags": []
+    },
+    "xplat": {
+      "tags": []
+    },
+    "web-app-e2e": {
+      "tags": []
+    },
+    "web-app": {
+      "tags": []
+    },
+    "mobile-app": {
+      "tags": []
+    },
+    "hybrid-app": {
+      "tags": []
+    }
+  }
+}

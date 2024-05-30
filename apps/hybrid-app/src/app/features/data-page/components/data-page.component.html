@@ -1,0 +1,166 @@
+<div class="m-3 margin-top-2" *ngIf="posts">
+  <ul ngbNav #nav="ngbNav" [(activeId)]="active" class="nav-tabs">
+    <li [ngbNavItem]="1">
+      <a class="custom-tab-header fontRobotoMedium" ngbNavLink>{{ 'MENU_POSTS' | translate}}</a>
+      <ng-template ngbNavContent>
+        <!--Report content-->
+        <div class="header row m-0 mb-4 pt-3 flex-grow-1">
+          <eview-forms (onFormSelect)="onFormChange($event)"></eview-forms>
+          <div class="btn-group flex-grow-1 flex-report-header-wrapper" role="group">
+            <button class="btn btn-md btn-light" *ngIf="!posts && !posts.results">
+              {{ 'LOADING' | translate }}
+            </button>
+            <div class="min-width-300 flex-grow-1">
+              <button
+                class="btn custom-report-info btn-md btn-light"
+                *ngIf="posts && posts.total_count !== 0"
+              >
+                {{ 'POST_SHOWING' | translate }}
+                {{ posts.results.length }}
+                {{ 'DATA_POSTS_INDICATOR_SEPARATOR' | translate }}
+                {{ posts.total_count }}
+                {{ 'DATA_POSTS_INDICATOR_SUFFIX' | translate }}
+              </button>
+              
+            </div>
+            <div>
+              <button
+                *ngIf="userCanFilterPosts"
+                class="btn btn-md btn-light"
+                (click)="onFiltersClick(content)"
+              >
+                <fa-icon
+                  [icon]="'filter'"
+                  [style.color]="filterActive ? '#0062cc' : ''"
+                  class="mr-0"
+                ></fa-icon>
+                <span class="fontRobotoRegular font-size-12">{{ 'FILTERS' | translate }}</span>
+              </button>
+            </div>
+            <div>
+              <button class="btn btn-md btn-light" (click)="onRefreshClick()">
+                <!-- <fa-icon [icon]="'redo-alt'" class="mr-0"></fa-icon> -->
+                <span class="text-underline font-size-12 fontRobotoRegular d-md-inline d-lg-inline d-xl-inline ml-1">{{
+                  'REFRESH' | translate
+                }}</span>
+              </button>
+            </div>
+            <!--Import-->
+            <div *ngIf="userCanAccessImportExport">
+              <button
+                class="btn btn-md btn-light"
+                *ngIf="posts && posts.total_count"
+                (click)="onExportClick()"
+                title="{{'FILE_EXPORT'|translate}}"
+              >
+                <fa-icon [icon]="'file-download'" class="mr-0"></fa-icon>
+              </button>
+              <button
+                class="btn btn-md btn-light"
+                *ngIf="posts && posts.total_count"
+                (click)="onUploadClick()"
+                title="{{'FILE_IMPORT'|translate}}"
+              >
+                <fa-icon [icon]="'file-upload'" class="mr-0"></fa-icon>
+              </button>
+            </div>
+          </div>
+        </div>
+        <div class="row mb-3" style="padding-right: 10px;">
+          <div
+            class="left-side col-12 col-lg-6 col-md-6 col-sm-12"
+            infiniteScroll
+            [infiniteScrollDistance]="2"
+            [infiniteScrollThrottle]="50"
+            (scrolled)="onScrollDown()"
+            [class.show-post-detail]="showPostDetail"
+            [scrollWindow]="false"
+          >
+            <eview-post
+              *ngFor="let post of posts.results"
+              (onShowLinkedPostClick)="onShowChildPosts($event)"
+              [post]="post"
+            ></eview-post>
+            <p class="custom-report-info marg-left-1" *ngIf="posts.results.length === 0">
+              {{ 'NO_RECORDS' | translate }}
+            </p>
+          </div>
+          <!--linked reports child reports -->
+          <div
+            *ngIf="childPosts && childPosts.results && childPosts.results.length !== 0"
+            [hidden]="!showChildPosts"
+            class="middle-side col-12 col-lg-6 col-md-6 col-sm-12"
+            [class.show-post-detail]="showChildPosts"
+          >
+            <div class="mb-2" *ngIf="childPosts.results.length > 0">
+              <span class="font-weight-bold"
+                >{{ parentPostTitle }} - {{ childPosts.results.length }}</span
+              >
+              <fa-icon
+                style="cursor: pointer;"
+                [icon]="'times'"
+                class="m-0"
+                class="close-icon float-right"
+                *ngIf="showChildPosts"
+                (click)="onChildPostsClose()"
+              ></fa-icon>
+            </div>
+            <eview-post
+              *ngFor="let post of childPosts.results"
+              [post]="post"
+            ></eview-post>
+          </div>
+          <div
+            class="right-side col-12 col-lg-6 col-md-6 col-sm-12"
+            *ngIf="posts"
+            [hidden]="showChildPosts"
+            [class.show-post-detail]="showPostDetail"
+          >
+            <div class="container">
+              <div class="row">
+                <eview-post-detail
+                  (onClose)="onPostDetailClose()"
+                  (onShowLinkedPostClick)="onShowChildPosts($event)"
+                  (onLinkedPostClick)="onLinkPostClicked($event)"
+                  style="width: 100%;"
+                ></eview-post-detail>
+              </div>
+            </div>
+          </div>
+        </div>
+       </ng-template>
+  </ul>
+  <div [ngbNavOutlet]="nav" class="mt-2"></div>
+</div>
+<ng-template #content let-modal>
+  <div class="modal-header">
+    <h4 class="modal-title" id="modal-basic-title">
+      {{ 'FILTERS' | translate }}
+    </h4>
+    <button
+      type="button"
+      class="close"
+      aria-label="Close"
+      (click)="modal.dismiss('Cross click')"
+    >
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <eview-filters
+      [resetFilters]="resetFilters"
+      (onCancel)="onRefreshClick(true); modal.close()"
+      (onApply)="onApplyFilter($event)"
+      [formID]="formId"
+    ></eview-filters>
+  </div>
+</ng-template>
+<eview-post-search
+  [openModal]="openModal"
+  [isAllReports]="false"
+  (onShowLinkedPostClick)="onShowChildPosts($event)"
+  (onCancelClick)="onCancelClick()"
+  (onApplyClick)="onApplyClick($event)"
+></eview-post-search>
+
+

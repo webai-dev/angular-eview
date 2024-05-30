@@ -1,0 +1,30 @@
+<div class="pad-left-1" *ngIf="comments && comments.results">
+  <hr class="mt-2 mb-3" />
+  <div class="btn-group mb-3" role="group">
+    {{role}}
+    <button
+      class="btn btn-sm btn-primary"
+      [disabled]="user.role === ROLE_PRO_USER || (post.parent && post.parent.id > 0)"
+      (click)="onAddClick()"
+    >
+      <fa-icon [icon]="'plus'" class="m-0"></fa-icon>
+    </button>
+    <button class="btn btn-sm btn-light" translate>
+      {{ label }}
+    </button>
+    <button [disabled]="user.role === role" class="btn btn-sm btn-light" (click)="onRefreshClick()">
+      <fa-icon [icon]="'redo-alt'" class="m-0"></fa-icon>
+    </button>
+  </div>
+  <p *ngIf="comments.results.length === 0">
+    {{ 'NO_RECORDS' | translate }}
+  </p>
+  <div *ngFor="let comment of comments.results">
+    <eview-post-comment
+      [isParent]="!(post.parent && post.parent.id > 0) || user.role === ROLE_PRO_USER"
+      [comment]="comment"
+      [user]="user"
+      *ngIf="comment.id !== -1"
+    ></eview-post-comment>
+  </div>
+</div>

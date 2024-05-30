@@ -1,0 +1,344 @@
+<div class="m-1">
+  <div class="row mt-3 ml-1">
+    <button
+      class="btn btn-md btn-outline-success mb-2"
+      (click)="onAddUserClick(useraddedit)"
+    >
+      <fa-icon [icon]="'plus'" class="m-0"></fa-icon>
+    </button>
+    <div class="user-search">
+    <input id="search-by-address" type="text" class="form-control"
+            (selectItem)="onValueSelected($event)"
+            [resultFormatter]="formatter"
+            [inputFormatter]="formatter"
+            [(ngModel)]="model"
+            [ngbTypeahead]="search"
+            [class.is-invalid]="searchFailed"
+            placeholder="{{'SEARCH'|translate}}"
+            [editable]="false"/>
+    </div>
+      <button
+      class="btn btn-md btn-outline-success ml-2 mb-2"
+      (click)="getUsersList()"
+    >
+      <fa-icon [icon]="'undo'" class="m-0"></fa-icon>
+    </button>
+  </div>
+  <div class="row">
+    <div class="col-lg-12 col-md-12 col-sm-12">
+      <table class="table table-bordered table-hover" style="width: 100%;">
+        <thead>
+          <tr>
+            <th scope="col fontRobotoBold">#</th>
+            <th scope="col fontRobotoBold" sortable="realname">
+              {{ 'USER_NAME' | translate }}
+            </th>
+            <th scope="col fontRobotoBold" sortable="email">
+              {{ 'EMAIL' | translate }}
+            </th>
+            <th scope="col fontRobotoBold" sortable="role">
+              {{ 'ROLE' | translate }}
+            </th>
+            <th scope="col fontRobotoBold">{{ 'ACTION' | translate }}</th>
+          </tr>
+        </thead>
+        <tbody *ngIf="users && users.length > 0">
+          <tr *ngFor="let user of users | paginate
+                : {
+                    itemsPerPage: limit,
+                    currentPage: currentPage,
+                    totalItems: total_count
+                  }; let i = index">
+            <th scope="row fontRobotoBold">{{ i + 1 }}</th>
+            <td class="fontRobotoRegular">{{ user.realname }}</td>
+            <td class="fontRobotoRegular">{{ user.email }}</td>
+            <td class="fontRobotoRegular">{{ UsersHelpers.GetRoleDisplayname(roles, user.role).display_name }}</td>
+            <td class="">
+              <button
+                class="btn btn-sm btn-outline-danger text-center"
+                *ngIf="i === selectedId"
+                (click)="onConfirmClick(user.id)"
+              >
+                <fa-icon [icon]="'trash'" class="m-0"></fa-icon>
+                {{ 'CONFIRM' | translate }}
+              </button>
+              <button
+                class="btn btn-sm btn-light"
+                *ngIf="i === selectedId"
+                (click)="selectedId = -1"
+              >
+                <fa-icon [icon]="'times'" class="m-0"></fa-icon>
+              </button>
+              <button
+                class="btn btn-sm btn-light text-center"
+                *ngIf="i !== selectedId"
+                (click)="onEditClick(useraddedit, i)"
+              >
+                <fa-icon [icon]="'pen'" class="m-0"></fa-icon>
+              </button>
+              <button
+                class="btn btn-sm btn-outline-danger text-center"
+                *ngIf="i !== selectedId"
+                (click)="onDeleteClick(i)"
+              >
+                <fa-icon [icon]="'trash'" class="m-0"></fa-icon>
+              </button>
+              <button
+                class="btn btn-sm btn-light"
+                (click)="onContactClick(user)"
+                title="{{ 'CONTACT_HEADER' | translate }}"
+              >
+                <fa-icon [icon]="'address-book'" class="m-0"></fa-icon>
+              </button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+      <div class="float-right" *ngIf="users && users.length > 0">
+        <pagination-controls
+          (pageChange)="pageChanged($event)"
+          (pageBoundsCorrection)="pageChanged($event)"
+        ></pagination-controls>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="row m-1" *ngIf="isAddUserClick">
+  <div class="mt-3 ml-1">
+    <button
+      class="btn btn-md btn-outline-success mb-2"
+      (click)="onAddContactClick(content)"
+    >
+      <fa-icon [icon]="'plus'" class="m-0"></fa-icon>
+    </button>
+    <p *ngIf="contacts && contacts.length === 0">
+      {{ 'NO_RECORDS' | translate }}
+    </p>
+  </div>
+
+  <table
+    *ngIf="contacts && contacts.length > 0"
+    class="table table-bordered table-hover"
+    style="width: 100%;"
+  >
+    <thead>
+      <tr>
+        <th scope="col">#</th>
+        <th scope="col" sortable="realname">
+          {{ 'DATA_SOURCE' | translate }}
+        </th>
+        <th scope="col" sortable="email">
+          {{ 'TYPE' | translate }}
+        </th>
+        <th scope="col" sortable="role">
+          {{ 'CONTACT' | translate }}
+        </th>
+        <th scope="col">{{ 'ACTION' | translate }}</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let contact of contacts; index as i">
+        <td>{{ i + 1 }}</td>
+        <td>{{ contact.data_source }}</td>
+        <td>{{ contact.type }}</td>
+        <td>{{ contact.contact }}</td>
+        <td>
+          <button
+            class="btn btn-sm text-center"
+            *ngIf="i === selectedContactId"
+            (click)="onContactConfirmClick(contact.id, i)"
+          >
+            <fa-icon [icon]="'trash'" class="m-0"></fa-icon>
+            {{ 'CONFIRM' | translate }}
+          </button>
+          <button
+            class="btn btn-sm btn-light"
+            *ngIf="i === selectedContactId"
+            (click)="selectedContactId = -1"
+          >
+            <fa-icon [icon]="'times'" class="m-0"></fa-icon>
+          </button>
+          <button
+          class="btn btn-sm btn-light text-center"
+          *ngIf="i !== selectedId"
+          (click)="onEditContactClick(content, i)"
+        >
+          <fa-icon [icon]="'pen'" class="m-0"></fa-icon>
+        </button>
+          <button
+            class="btn btn-sm btn-outline-danger text-center"
+            *ngIf="i !== selectedContactId"
+            (click)="selectedContactId = i"
+          >
+            <fa-icon [icon]="'trash'" class="m-0"></fa-icon>
+          </button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<ng-template #useraddedit let-modal>
+  <div class="modal-body">
+    <div class="mb-4">
+      <button
+        type="button"
+        class="close"
+        aria-label="Close"
+        (click)="modal.dismiss('Cross click')"
+      >
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </div>
+    <form [formGroup]="userForm" class="ml-3 mr-3">
+      <div class="mb-2 fontRobotoBold">
+        {{ 'USER_HEADER' | translate }}
+      </div>
+      <div class="row col-md-12 col-sm-12 p-0">
+        <div class="input-group mb-2">
+          <div>
+            <label class="fontRobotoMedium custom-user-input-group-text">{{
+              'USER_NAME' | translate
+            }}</label>
+          </div>
+          <input
+            type="text"
+            class="form-control"
+            formControlName="realname"
+            [placeholder]="'USER_NAME' | translate"
+          />
+        </div>
+        <div class="input-group mb-2">
+          <div>
+            <label class="fontRobotoMedium custom-user-input-group-text">{{ 'EMAIL' | translate }}</label>
+          </div>
+          <input
+            type="text"
+            class="form-control"
+            formControlName="email"
+            [placeholder]="'EMAIL' | translate"
+          />
+        </div>
+        <div class="input-group mb-2">
+          <div>
+            <label class="fontRobotoMedium custom-user-input-group-text">{{ 'PASSWORD' | translate }}</label>
+          </div>
+          <input
+            type="password"
+            class="form-control"
+            formControlName="password"
+            [placeholder]="'PASSWORD' | translate"
+          />
+        </div>
+        <small class="form-text text-muted" style="margin:-5px 0 3px 0px; ">{{'PASSWORD_INFO_TEXT' | translate}}</small>
+        <div class="input-group mb-2">
+          <div>
+            <label class="fontRobotoMedium custom-user-input-group-text">{{ 'Role' | translate }}</label>
+          </div>
+          <select
+            class="custom-select"
+            formControlName="role"
+            *ngIf="roles"
+          >
+            <option></option>
+            <option *ngFor="let role of roles" [ngValue]="role.name">
+              {{ role.display_name }}
+            </option>
+          </select>
+        </div>
+        <div class="d-flex justify-content-end">
+          <button
+            class="btn fontRobotoMedium btn-md btn-light mr-2 cursor-pointer"
+            type="button"
+            (click)="onCancelClick(); modal.close()"
+            *ngIf="isEditing"
+            translate
+          >
+            CANCEL
+          </button>
+          <button
+            class="btn fontRobotoMedium btn-outline-primary btn-md cursor-pointer"
+            type="button"
+            (click)="onSubmitClick()"
+            [class.btn-light]="userForm.valid"
+            [class.btn-primary]="!userForm.valid"
+            [disabled]="!userForm.valid"
+            translate
+          >
+            <fa-icon [icon]="'save'"></fa-icon>
+            {{ isEditing ? 'UPDATE' : 'SUBMIT' }}
+          </button>
+        </div>
+      </div>
+    </form>
+  </div>
+</ng-template>
+<ng-template #content let-modal>
+  <div class="modal-body">
+    <div class="mb-4">
+      <button
+        type="button"
+        class="close"
+        aria-label="Close"
+        (click)="modal.dismiss('Cross click')"
+      >
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </div>
+    <form [formGroup]="contactForm" class="ml-3 mr-3">
+      <div class="mb-2 fontRobotoBold">
+        {{ 'CONTACT_HEADER' | translate }}
+      </div>
+      <div class="row col-md-12 col-sm-12 p-0">
+        <div class="input-group mb-2">
+          <div>
+            <label class="fontRobotoMedium custom-user-input-group-text">{{
+              'CONTACT_TYPE' | translate
+            }}</label>
+          </div>
+          <select class="custom-select" formControlName="type">
+            <option>{{ 'SELECT' | translate }}</option>
+            <option *ngFor="let type of contactTypes" [ngValue]="type.toLowerCase()">
+              {{ type | translate }}
+            </option>
+          </select>
+        </div>
+        <div class="input-group mb-2">
+          <div>
+            <label class="fontRobotoMedium custom-user-input-group-text">{{ 'CONTACT' | translate }}</label>
+          </div>
+          <input
+            type="text"
+            class="form-control"
+            formControlName="contact"
+            [placeholder]="'CONTACT' | translate"
+          />
+        <small class="ml-3 form-text text-muted">{{'INFORMATIVE_TEXT' | translate}}</small>
+        </div>
+        <div class="ml-2 d-flex justify-content-end">
+          <button
+            class="btn btn-md btn-light mr-2"
+            type="button"
+            (click)="showContact = false; modal.dismiss('Cross click')"
+            translate
+          >
+            CANCEL
+          </button>
+          <button
+            class="btn btn-md btn-outline-primary float-right"
+            type="button"
+            (click)="onContactSubmitClick()"
+            [class.btn-light]="contactForm.valid"
+            [class.btn-primary]="!contactForm.valid"
+            [disabled]="!contactForm.valid"
+            translate
+          >
+            <fa-icon [icon]="'save'"></fa-icon>
+            {{ isEditing ? 'UPDATE' : 'SUBMIT' }}
+          </button>
+        </div>
+      </div>
+    </form>
+  </div>
+</ng-template>

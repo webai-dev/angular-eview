@@ -1,0 +1,37 @@
+@import '../../../../styles.scss';
+
+.buttons {
+  position: absolute;
+  bottom: 24px;
+  right: 8px;
+  z-index: 200;
+  button {
+    background-color: $undp-jtf-accent-color;
+    border-color: $undp-jtf-accent-color;
+  }
+}
+
+.post-detail-container {
+  position: absolute;
+  top: 50px;
+  right: 0;
+  width: calc(40vw);
+  height: calc(100vh - 48px);
+  background: rgba(255, 255, 255, 0.75);
+  overflow: hidden;
+  overflow-y: scroll;
+  @media (max-width: 767px) {
+    width: 100vw;
+    top: 115px;
+  }
+  fa-icon.close-icon {
+    position: absolute;
+    right: 12px;
+  }
+}
+
+.map-height  {
+  height: 100vh;
+  min-height: 100%;
+  min-width: 100%;
+}

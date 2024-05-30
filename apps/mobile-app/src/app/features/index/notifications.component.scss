@@ -1,0 +1,22 @@
+.notification-container {
+   background-color: #ffffff;
+   overflow: scroll;
+   height: 65vh;
+  .notification {
+    color: #000000;
+    border-bottom: 1px solid #00000020;
+    &:last-child {
+      border: none;
+    }
+    opacity: 0.75;
+    &.notification-unread {
+      opacity: 1;
+      font-weight: bold;
+    }
+  }
+
+  .notification-tray {
+    max-width: 275px;
+    overflow-wrap: break-word;
+  }
+}

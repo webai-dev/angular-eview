@@ -1,0 +1,225 @@
+<div class="card-body p-0 active-card-item" *ngIf="post">
+  <div class="btn-action-group">
+    <div class="">
+        <div>
+          <span>
+          <img
+              (click)="onRefreshClick()"
+              title="Redo"
+              class="post-action-btn"
+              src="/assets/images/redo.svg"
+            />
+          </span>
+          <span
+            *ngIf="
+              (AuthHelpers.User.HasUserPermission(
+                store,
+                Permission.ViewUserActivity
+              ) | async) && postActivities$ | async as activities
+            "
+            ngbDropdown
+            #HistoryDropdown="ngbDropdown"
+            placement="left-top"
+          >
+            <img
+              id="history-dropdown"
+              ngbDropdownToggle
+              title="History"
+              class="post-action-btn"
+              src="/assets/images/history.svg"
+            />
+            <div
+              ngbDropdownMenu
+              aria-labelledby="history-dropdown"
+              class="notifications-dropdown"
+              style="width: 260px;"
+            >
+              <div class="row p-2 ngbDropdownItem" *ngFor="let item of activities">
+                <div class="col">
+                  <div>
+                    <span class="mr-1">
+                      <fa-icon [icon]="'stream'"></fa-icon>
+                    </span>
+                    {{ PostHelpers.FormatUser(item.user_id, users) }}&nbsp;
+                    <span class="fontRobotoMedium" translate> {{ 'ACTIVITY_TEXT' | translate }} </span
+                    >&nbsp;{{
+                      PostHelpers.FormatDate(item.value, 'created', format)
+                    }}
+                  </div>
+                </div>
+              </div>
+            </div>
+          </span>
+            <span
+              (click)="onEditClick()"
+              *ngIf="
+                AuthHelpers.Resources.HasPriviledgeOn(post, AllowedPriviledge.Update)
+              "
+            >
+              <img
+                title="Edit"
+                class="post-action-btn"
+                src="/assets/images/pen.svg"
+              />
+            </span>
+            <span
+              data-toggle="dropdown"
+              id="filter-dropdown"
+              (click)="onDeleteClick(content)"
+              *ngIf="
+                AuthHelpers.Resources.HasPriviledgeOn(post, AllowedPriviledge.Delete)
+              "
+            >
+              <img
+                title="Delete"
+                class="post-action-btn"
+                src="/assets/images/trash.svg"
+              />
+            </span>            
+        </div>
+  <div class="post-detail-close">
+        <span>
+          <img
+              (click)="onPostDetailClose()"
+              title="Close"
+              class="post-action-btn"
+              src="/assets/images/times.svg"
+            />
+        </span>
+  </div>
+      </div>
+  </div>
+  <div class="flex-detail-card-wrapper">    
+    <div class="flex-detail-card-row">
+      <div class="pad-left-right" *ngIf="post.icon">
+        <i class="{{post.icon}}"></i>
+      </div>      
+      <div class="flex-detail-card-column-wrapper flex-grow-1">
+        <div class="fontRobotoBold word-wrap">{{ post.title }}</div>
+        <div class="">
+          <span class="font-weight-bold fontRobotoRegular pr-2">{{'POST_ID' | translate }} 
+              <span class="fontRobotoRegular">{{post.id}}</span>
+          </span>
+          <span class="font-weight-bold fontRobotoRegular">{{'POST_SOURCE' | translate }} 
+            <span *ngIf="post.source" class="fontRobotoRegular">{{post.source | translate | uppercase}}</span>
+            <span *ngIf="!post.source" class="fontRobotoRegular">{{'POST_SOURCE_WEB' | translate  }}</span>
+          </span>
+        </div>
+      </div>     
+      
+    </div>
+  </div><!--first row ends-->
+ <eview-post-subtitle [disableLinkPost]="true" [post]="post"></eview-post-subtitle> 
+  <div class="post-detail-box">
+      <p class="fontRobotoRegular pad-2 card-text mt-3 word-wrap">
+        {{ post.content }}
+      </p>
+  </div>
+  <div class="pad-2 flex-btn-group-wrapper value mb-3" *ngFor="let value of post.values">
+      <div class="flex-btn-group flex-grow-1">
+          <span class="fontRobotoMedium label mb-1"
+          >{{ value.label | translate }}
+          <a
+            *ngIf="value.type === FormAttributeType.Media"
+            style="float: right; margin-top: -4px;"
+          >
+            <button
+              class="btn btn-sm ml-1 mb-2 btn-light"
+              type="button"
+              (click)="onDownloadMediaClick(value)"
+            >
+              <fa-icon [icon]="'download'" class=""></fa-icon>
+            </button>
+          </a>
+        </span>
+      </div>
+      <!-- list of instructions including location map -->
+      <div class="flex-btn-group"><span class="fontRobotoMedium instructions">{{ value.instructions | translate }}</span></div>
+      <div class="flex-btn-group" *ngIf="value.type === FormAttributeType.Tags">
+        <span class="mb-1" *ngFor="let tag of value.value">{{
+          tag.tag | translate
+        }}</span>
+      </div>
+      <div class="flex-btn-group"
+        *ngIf="
+          value.type === FormAttributeType.Varchar &&
+          (value.input === FormAttributeInput.Select ||
+            value.input === FormAttributeInput.Radio ||
+            value.input === FormAttributeInput.Checkbox)
+        "
+      >
+        <span class="mb-1" *ngFor="let option of value.value">{{
+          option | translate
+        }}</span>
+      </div>
+      <div class="flex-btn-group">
+        <span
+        *ngIf="
+          value.input === FormAttributeInput.Text ||
+          value.input === FormAttributeInput.TextArea ||
+          value.input === FormAttributeInput.Number ||
+          value.input === FormAttributeInput.Date ||
+          value.input === FormAttributeInput.DateTime
+        "
+        >{{ value.value[0] }}</span
+      >
+      </div>
+
+      <iframe
+        *ngIf="value.type === FormAttributeType.Media && mediaUrls[value.key]"
+        [src]="mediaUrls[value.key]"
+      ></iframe>
+      <a
+        [href]="value.value[0]"
+        target="blank"
+        *ngIf="value.input === FormAttributeInput.Video"
+        >{{ value.value[0] }}</a
+      >
+      <div
+        class="map-container"
+        *ngIf="value.input === FormAttributeInput.Location && !hideLocationMap">
+        <eview-map [disabled]="true" [mapId]="'map-view-detail'" [marker]="value.value[0]"></eview-map>
+      </div>
+      <span *ngIf="value.input === FormAttributeInput.Location && hideLocationMap"
+        >{{ 'LATITUDE' | translate }} {{ value.value[0].lat }}</span
+      >
+      <span *ngIf="value.input === FormAttributeInput.Location && hideLocationMap"
+        >{{ 'LONGITUDE' | translate }} {{ value.value[0].lon }}</span
+      >
+  </div>
+
+  <eview-post-comments
+    [post]="post"
+    [user]="user"
+    [type]="PostCommentType.Response"
+    (postStatusChangeOnSaveCommt)="updatePostStatusOnCmtSave($event)"
+  ></eview-post-comments>
+  <eview-post-comments
+    [post]="post"
+    [user]="user"
+    [type]="PostCommentType.AfterActionReport"
+    (postStatusChangeOnSaveCommt)="updatePostStatusOnCmtSave($event)"
+  ></eview-post-comments>
+</div>
+
+<ng-template #content let-modal>
+  <div class="modal-body text-center">
+    <p>{{ 'CONFIRMATION_MESSAGE' | translate }}</p>
+    <div class="m-2">
+      <button
+        class="btn btn-primary mr-2"
+        (click)="onDeleteConfirmationClick()"
+        type="button"
+      >
+        OK
+      </button>
+      <button
+        class="btn btn-primary"
+        (click)="modal.dismiss('Cross click')"
+        type="button"
+      >
+        Cancel
+      </button>
+    </div>
+  </div>
+</ng-template>

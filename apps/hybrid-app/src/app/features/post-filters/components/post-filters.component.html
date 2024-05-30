@@ -1,0 +1,176 @@
+<div *ngIf="configFilters && configFilters.length > 0">
+  <div class="flex-forms-wrapper">
+    <eview-forms (onFormSelect)="onFormChange($event)"></eview-forms>
+  </div>
+  <div class="flex-analysis-wrapper">
+        <div>
+          <label class="fontRobotoBold font-report-text">
+            {{ 'REPORT_DURATION' | translate  }}
+          </label>
+        </div>  
+        <!--report duration-->
+        <div style="display: flex; gap: 2rem; flex-direction: horizontal;">
+          <div class="custom-report-duration" *ngFor="let item of configFilters[1].values">
+            <button [ngClass]="{'button-selected': selectedFilters['duration'] == item.id }" (click)="onFilterValueChanges(item.id)" class="fontRobotoMedium custom-row-btn btn btn-border-report font-report-text report-text btn-outline-report">
+              {{ item.name | uppercase | translate}}
+            </button>
+          </div>
+        </div>
+        <div style="position: absolute; right: 50px;">
+            <button (click)="getAllReportsData()"
+            [disabled]="isDisabled" class="btn custom-btn-outline-primary fontRobotoMedium btn-template-row-text btn-border"> {{ 'PREVIEW' | translate}}</button>
+            <button (click)="onReportSaveClick(content)"
+            [disabled]="isDisabled" class="marg-left-2 btn custom-btn-outline-primary fontRobotoMedium btn-template-row-text btn-border"> {{ 'SAVE' | translate}}</button>  
+        </div>
+  </div>
+
+  <!--Date for custom reports-->
+  <div class="flex-custom-date-wrapper" *ngIf="selectedFilters[configFilters[1].key] == 4">
+      <div class="flex-custom-date-row">
+          <div>
+            <label class="fontRobotoBold font-report-text label-line-height">{{ 'FROM_DATE' | translate }}</label>
+          </div>
+          <input
+            class="marg-left-1 form-control"
+            ngbDatepicker
+            #fromDate="ngbDatepicker"
+            [(ngModel)]="selectedFilters['fromdate']"
+          />
+          <div>
+            <button
+              class="btn btn-outline-secondary"
+              style="border-top-right-radius: 4px !important; border-bottom-right-radius: 4px;"
+              (click)="fromDate.toggle()"
+              type="button"
+            >
+              <fa-icon [icon]="'calendar-alt'"></fa-icon>
+            </button>
+          </div>
+      </div>
+      <div class="flex-custom-date-row">
+          <div>
+            <label class="fontRobotoBold font-report-text label-line-height">{{ 'TO_DATE' | translate }}</label>
+          </div>
+          <input
+            class="marg-left-1 form-control"
+            ngbDatepicker
+            #toDate="ngbDatepicker"
+            [(ngModel)]="selectedFilters['todate']"
+          />
+        <div>
+          <button
+            class="btn btn-outline-secondary"
+            style="border-top-right-radius: 4px !important; border-bottom-right-radius: 4px;"
+            (click)="toDate.toggle()"
+            type="button"
+          >
+            <fa-icon [icon]="'calendar-alt'"></fa-icon>
+          </button>
+        </div>
+      </div>
+      </div>
+
+  <!--Data preferences-->
+  <div class="flex-data-preferences-wrapper">
+    <div>
+      <label class="fontRobotoBold font-report-text">
+        {{ 'DATA_PREFERENCES' | translate  }}
+      </label>
+    </div>  
+    <div>
+      <input
+      type="radio"
+      id="filter-incident"
+      name="dataPreferences"
+      (change)="onFilterValueChanges(selectedFilters['duration'])"
+      value="1"
+      [(ngModel)]="isReportChecked" />
+      <label for="filter-incident" class="pad-left-1 fontRobotoBold font-report-text">
+        {{ 'FILTER_INCIDENT_LABEL' | translate}}
+      </label>
+    </div>
+    <div>
+      <input
+      type="radio"
+      id="filter-reports"
+      value="2"
+      (change)="onFilterValueChanges(selectedFilters['duration'])"
+      name="dataPreferences"
+      [(ngModel)]="isReportChecked" />
+      <label for="filter-reports" class="pad-left-1 fontRobotoBold font-report-text">
+        {{ 'FILTER_REPORT_LABEL' | translate}}
+      </label>
+    </div>
+  </div>
+   
+   <!-- Add more charts / show map -->
+   <div class="flex-charts-wrapper">
+      <p
+        *ngIf="showReport && (posts && posts.count === 0)"
+        class="font-report-text ml-3"
+      >
+        {{ 'NO_RECORDS' | translate }}
+      </p>
+      <label *ngIf="showReport" class="cursor-pointer" (click)="loadFlexchart()" class="cursor-pointer fontRobotoMedium add-more-charts-text">
+        + {{ 'ADD_MORE_CHARTS' | translate }}
+      </label>
+      <hr *ngIf="showReport" class="line-divider">
+      <label *ngIf="showReport" class="cursor-pointer" (click)="onShowMap()" class="cursor-pointer fontRobotoMedium add-more-charts-text">
+          {{ 'SHOW_MAP' | translate }}
+      </label>
+   </div>
+  <eview-post-graph
+    [isSingle]="isShowMapClicked"
+    [index]="1"
+    [type]="graphType"
+    [data]="regionalMapData"
+    [xAxisLabel]="xAxisLabel"
+    [yAxisLabel]="yAxisLabel"
+    [legendPosition]="legendPosition"
+    [legendTitle]="Regions"
+    [legendTitle]="category"
+  ></eview-post-graph>
+  <ng-template #content let-modal>
+    <div class="modal-body">
+      <div class="mb-4">
+        <button
+          type="button"
+          class="close"
+          aria-label="Close"
+          (click)="modal.dismiss('Cross click')"
+        >
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="col-md-12">
+        <div class="input-group mb-2 col-md-12">
+          <div class="input-group-prepend">
+            <label class="input-group-text">{{
+              'REPORT_NAME' | translate
+            }}</label>
+          </div>
+          <input
+            type="text"
+            class="form-control"
+            name="report-title"
+            [(ngModel)]="reportTitle"
+            id="report-tile"
+          />
+        </div>
+      </div>
+      <div class="float-right" style="margin-right: 30px;">
+        <button
+          type="button"
+          class="btn btn-sm btn-change-status btn-primary"
+          (click)="onSaveFilterClick()"
+          [disabled]="!(showReport && reportTitle.trim().length > 0)"
+        >
+          {{ 'CONFIRM' | translate }}
+        </button>
+      </div>
+    </div>
+  </ng-template>
+
+</div>
+
+

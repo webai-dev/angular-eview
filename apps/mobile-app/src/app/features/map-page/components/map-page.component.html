@@ -1,0 +1,79 @@
+
+<div class="map-height">
+  <eview-map [mapId]="'map-view'" [getMarkersFromStore]="true"></eview-map>
+  <div class="d-flex flex-column justify-content-center buttons">
+    <div class="text-center mb-2" *ngIf="userCanFilterPosts">
+      <button
+        type="button"
+        class="btn btn-primary btn-circle btn-md"
+        [style.background-color]="filterActive ? '#fff' : ''"
+        (click)="onFiltersClick(content)"
+      >
+        <fa-icon
+          [icon]="'filter'"
+          [style.color]="filterActive ? '#0062cc' : '#fff'"
+        ></fa-icon>
+      </button>
+    </div>
+    <div class="text-center mb-2">
+      <button
+        type="button"
+        class="btn btn-primary btn-circle btn-md"
+        (click)="onRefreshClick()"
+      >
+        <fa-icon [icon]="'redo-alt'"></fa-icon>
+      </button>
+    </div>
+    <div class="text-center">
+      <button
+        type="button"
+        class="btn btn-primary btn-circle btn-xl"
+        (click)="onSubmitClick()"
+        *ngIf="userCanSubmitPosts"
+      >
+        <fa-icon [icon]="'plus'"></fa-icon>
+      </button>
+    </div>
+  </div>
+</div>
+<div
+  class="post-detail-container p-3"
+  [style.z-index]="showPostDetail ? '0' : '-1'"
+>
+  <eview-post-detail
+    [hideLocationMap]="true"
+    (onDeleted)="onPostDeleted()"
+    (onClose)="onPostDetailClose()"
+    (onShowLinkedPostClick)="onShowChildPosts($event)"
+    (onLinkedPostClick)="onLinkPostClicked($event)"
+  ></eview-post-detail>
+</div>
+
+<ng-template #content let-modal>
+  <div class="modal-header">
+    <h4 class="modal-title" id="modal-basic-title">
+      {{ 'FILTERS' | translate }}
+    </h4>
+    <button
+      type="button"
+      class="close"
+      aria-label="Close"
+      (click)="modal.dismiss('Cross click')"
+    >
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <eview-filters
+      (onCancel)="onRefreshClick(true)"
+      (onApply)="loadMarkers($event); modal.close()"
+    >
+    </eview-filters>
+  </div>
+</ng-template>
+<eview-post-search
+  [openModal]="openModal"
+  [isAllReports]="false"
+  (onCancelClick)="onCancelClick()"
+  (onApplyClick)="onApplyClick($event)"
+></eview-post-search>

@@ -1,0 +1,67 @@
+<div class="flex-message-wrapper container-fluid">
+  <!-- <div class="row m-2">
+    <div class="input-group">
+      <label class="p-2 float-left font-weight-bold">
+        {{ 'MESSAGES' | translate | uppercase }}
+      </label>
+    </div>
+  </div> -->
+  <div class="flex-message-row mt-2">
+    <div class="input-group">
+      <label class="fontRobotoBold message-text">
+        {{ 'MESSAGES' | translate  }}
+      </label>
+    </div>
+  </div>
+</div>
+
+<div class="row m-2">
+  <p *ngIf="messages && messages.count === 0" class="custom-no-records-info marg-top-2 ml-2">
+    {{ 'NO_RECORDS' | translate }}
+  </p>
+  <div class="table" *ngIf="messages && messages.count > 0">
+    <table class="table">
+      <thead class="custom-table-header">
+        <tr>
+          <th scope="col fontRobotoBold">#</th>
+          <th scope="col fontRobotoBold">{{ 'MESSAGE_TYPE' | translate }}</th>
+          <th scope="col fontRobotoBold">{{ 'MESSAGE_POST_ID' | translate }}</th>
+          <th scope="col fontRobotoBold">{{ 'MESSAGE_CONTENT' | translate }}</th>
+          <!-- <th scope="col">{{ 'MESSAGE_DIRECTION' | translate }}</th> -->
+          <!-- <th scope="col fontRobotoBold">{{ 'MESSAGE_DATA_SOURCE' | translate }}</th>-->
+          <th scope="col fontRobotoBold">{{ 'MESSAGE_DATETIME' | translate }}</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr
+          *ngFor="
+            let msg of messages.results
+              | paginate
+                : {
+                    itemsPerPage: limit,
+                    currentPage: currentPage,
+                    totalItems: messages.total_count
+                  };
+            let i = index
+          "
+        >
+          <th scope="row fontRobotoBold">{{ i + 1 }}</th>
+          <td class="fontRobotoRegular">{{ msg.type }}</td>
+          <td class="fontRobotoRegular">{{ msg.post_id }}</td>
+          <td class="fontRobotoRegular custom-message">{{ msg.message }}</td>
+          <!-- <td>{{ msg.direction }}</td> -->
+          <!--<td class="fontRobotoRegular">{{ msg.data_source }}</td>-->
+          <td class="fontRobotoRegular">{{ msg.created | date: 'dd/MM/yyyy HH:mm:ss' }}</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<div class="float-right" *ngIf="messages && messages.count > 0">
+  <pagination-controls
+    (pageChange)="pageChanged($event)"
+    (pageBoundsCorrection)="pageChanged($event)"
+  ></pagination-controls>
+</div>
+

@@ -1,0 +1,44 @@
+.header {
+  position: sticky;
+  top: 48px;
+  z-index: 2;
+  background: rgba(255, 255, 255, 0.75);
+  border-bottom: 1px solid #00000020;
+  outline: 1px solid white;
+}
+
+.left-side {
+  &.show-post-detail {
+    @media (max-width: 767px) {
+      display: none;
+    }
+  }
+}
+
+.right-side {
+  min-height: calc(100vh - 48px - 24px * 1.5);
+  border-left: 1px solid #00000020;
+  @media (max-width: 767px) {
+    position: absolute;
+    opacity: 0;
+    z-index: -1;
+  }
+  &.show-post-detail {
+    @media (max-width: 767px) {
+      position: unset;
+      opacity: 1;
+      z-index: 1;
+    }
+  }
+  .container {
+    position: sticky;
+    top: calc(48px + 87px);
+    fa-icon.close-icon {
+      position: absolute;
+      right: 0;
+    }
+    .row:not(:last-child) {
+      border-bottom: 1px solid #00000020;
+    }
+  }
+}

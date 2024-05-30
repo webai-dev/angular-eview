@@ -1,0 +1,40 @@
+<div style="height: 100vh;">
+  <eview-map [getMarkersFromStore]="true"></eview-map>
+
+  <div class="d-flex flex-column justify-content-center buttons">
+    <div class="text-center mb-2">
+      <button
+        type="button"
+        class="btn btn-primary btn-circle btn-md"
+        (click)="onRefreshClick()"
+      >
+        <fa-icon [icon]="'redo-alt'"></fa-icon>
+      </button>
+    </div>
+    <div class="text-center mb-2">
+      <button
+        type="button"
+        class="btn btn-primary btn-circle btn-xl"
+        (click)="onSubmitClick()"
+        *ngIf="userCanSubmitPosts"
+      >
+        <fa-icon [icon]="'plus'"></fa-icon>
+      </button>
+    </div>
+  </div>
+</div>
+<div
+  class="post-detail-container p-3"
+  [style.z-index]="showPostDetail ? '0' : '-1'"
+>
+  <fa-icon
+    [icon]="'times'"
+    class="m-0"
+    class="close-icon"
+    (click)="showPostDetail = false"
+  ></fa-icon>
+  <eview-post-detail
+    [hideLocationMap]="true"
+    (onDeleted)="onPostDeleted()"
+  ></eview-post-detail>
+</div>

@@ -1,0 +1,30 @@
+table {
+  border-collapse: separate;
+  border: 1px solid rgba(0, 0, 0, 0.125);
+  border-radius: 15px;
+}
+
+td,
+th {
+  border: none;
+}
+
+.custom-user-input-group-text {
+  display: flex;
+  -webkit-box-align: center;
+  align-items: center;
+  padding: 0.375rem 0.75rem;
+  margin-bottom: 0;
+  font-size: 1rem;
+  color: #000000;
+  text-align: center;
+  white-space: nowrap;
+  border-radius: 0.25rem;
+}
+
+.user-search {
+  width: 25%; 
+  margin-left: 10px;
+  position: absolute;
+  right: 20px;
+}

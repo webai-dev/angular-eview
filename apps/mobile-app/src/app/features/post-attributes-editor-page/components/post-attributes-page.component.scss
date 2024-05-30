@@ -1,0 +1,39 @@
+.card-form-attribute {
+  border-radius: 0;
+  border: none;
+  border-bottom: 1px solid #ced4da;
+  &:last-child {
+    border-bottom: none;
+  }
+}
+
+.btn-save {
+  background: #4383C2 0% 0% no-repeat padding-box;
+  color: #fff !important;
+}
+
+.margin-plus-icon {
+  margin-right: 0.5em;
+}
+
+.custom-card-body {
+  background-color: #ffffff;
+  box-shadow: 0 0 2px #000000;
+  padding: 1.5em;
+  border-radius: 15px;
+}
+
+.custom-card {
+  position: relative;
+  display: -webkit-box;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+  flex-direction: column;
+  min-width: 0;
+  word-wrap: break-word;
+}
+
+.mt-7 {
+  margin-top: 7rem !important;
+}

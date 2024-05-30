@@ -1,0 +1,29 @@
+<div class="m-3 mt-4">
+  <div class="row pl-3 pr-3 mb-3 justify-content-end">
+    <div class="btn-group" role="group">
+      <button
+        class="btn btn-md btn-success"
+        (click)="onAddClick()"
+        [disabled]="isAdding"
+      >
+        <fa-icon [icon]="'plus'" class="mr-0"></fa-icon>
+      </button>
+      <button class="btn btn-md btn-primary" (click)="onRefreshClick()">
+        <fa-icon [icon]="'redo-alt'" class="mr-0"></fa-icon>
+        <span class="d-none d-md-inline d-lg-inline d-xl-inline ml-1">{{
+          'REFRESH' | translate
+        }}</span>
+      </button>
+    </div>
+  </div>
+  <p *ngIf="!tags || tags.length === 0">
+    {{ 'NO_RECORDS' | translate }}
+  </p>
+  <eview-tag-editor
+    *ngFor="let tag of tags"
+    [tag]="tag"
+    (onAddCanceled)="onTagAddCanceled()"
+    (onUpdated)="onTagUpdated(tag)"
+    (onDeleted)="onTagDeleted(tag)"
+  ></eview-tag-editor>
+</div>

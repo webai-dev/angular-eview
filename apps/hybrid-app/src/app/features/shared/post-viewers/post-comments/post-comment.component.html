@@ -1,0 +1,242 @@
+<div class="card mb-3" *ngIf="comment">
+  <div class="card-body p-2">
+    <h6 class="mb-2 text-muted" *ngIf="comment.id">
+      <!-- <span> {{ 'POST_COMMENT_ID' | translate }} {{ comment.id }} </span> -->
+      <span>
+        <fa-icon [icon]="'calendar'"></fa-icon>
+        {{
+          PostCommentHelpers.FormatDate(comment, 'created', format.dateTime)
+        }}</span
+      >
+      <span>
+        <fa-icon [icon]="'user-circle'"></fa-icon>
+        {{ comment.user.realname || '?' }}</span
+      >
+      <span>
+        <button
+          class="btn btn-sm btn-light btn-edit"
+          type="button"
+          *ngIf="isParent && (user.role !== prouserRole)"
+          [disabled]="isEditing"
+          [style.opacity]="isEditing ? '0' : '1'"
+          (click)="isEditing = true"
+        >
+          <fa-icon [icon]="'pen'"></fa-icon>
+          {{ 'POST_COMMENT_EDIT' | translate }}
+        </button>
+      </span>
+    </h6>
+    <!--fix for ucd-17 -->
+    <!-- <div
+      class="input-group input-group-sm mb-2"
+      *ngIf="comment.type === PostCommentType.Response"
+    >
+      <div class="input-group-prepend">
+        <span class="input-group-text" translate
+          >POST_COMMENT_ACTION_TAKEN</span
+        >
+      </div>
+      <div class="form-control">
+        <input
+          type="checkbox"
+          [(ngModel)]="comment.action_taken"
+          [disabled]="!isEditing"
+          (click)="onActionTakenClick()"
+        />
+      </div>
+      <div class="input-group-prepend">
+        <span class="input-group-text" translate
+          >POST_COMMENT_NO_ACTION_TAKEN</span
+        >
+      </div>
+      <div class="form-control">
+        <input
+          type="checkbox"
+          [(ngModel)]="comment.no_action_taken"
+          [disabled]="!isEditing"
+          (click)="onNoActionTakenClick()"
+        />
+      </div>
+    </div> -->
+
+    <div class="input-group input-group-sm mb-2">
+      <div class="input-group-prepend">
+        <span class="input-group-text" translate>POST_COMMENT_CONTENT</span>
+      </div>
+      <textarea
+        class="form-control"
+        [(ngModel)]="comment.content"
+        [disabled]="!isEditing"
+      ></textarea>
+    </div>
+
+    <div
+      class="input-group mb-2"
+      *ngIf="comment.type === PostCommentType.Response"
+    >
+      <div class="input-group-prepend">
+        <span class="input-group-text" translate>POST_COMMENT_USERS</span>
+      </div>
+      <div class="form-control">
+        <span
+          class="badge"
+          style="font-weight: normal;"
+          *ngFor="let user of comment.users"
+          >{{ user.realname }}
+          <fa-icon
+            [icon]="'times-circle'"
+            *ngIf="isEditing"
+            (click)="onUserDelete(user)"
+            style="cursor: pointer;"
+          ></fa-icon
+        ></span>
+        <span
+          class="badge"
+          *ngIf="isEditing && (availableUsers$ | async) as availableUsers"
+        >
+          <select
+            class="custom-select"
+            [(ngModel)]="selectedUser"
+            *ngIf="proUsers && proUsers.results.length > 0"
+            (change)="onUserAdd()"
+          >
+            <option selected translate>SELECT</option>
+            <option
+              *ngFor="let user of proUsers.results"
+              [ngValue]="user"
+              >{{ user.realname }}</option>
+          </select>
+        </span>
+      </div>
+    </div>
+   
+    <div
+      class="input-group mb-2"
+      *ngIf="comment.type === PostCommentType.Response"
+    >
+      <div class="input-group-prepend">
+        <span class="input-group-text" translate
+          >POST_COMMENTS_LINKED_REPORTS</span
+        >
+      </div>
+      <div class="form-control">
+        <span
+          *ngIf="
+            !isEditing &&
+            (comment.linked_reports && comment.linked_reports.length === 0)
+          "
+          >{{ 'NO_LINKED_REPORTS' | translate }}</span
+        >
+        <a
+          *ngIf="!isCollapsed"
+          (click)="isCollapsed = !isCollapsed"
+          [attr.aria-expanded]="!isCollapsed"
+          aria-controls="appReports"
+          href="javascript:void(0);"
+          class="post-title-link"
+        >
+          <span
+            *ngIf="comment.linked_reports && comment.linked_reports.length > 0"
+            >{{ comment.linked_reports.length }}
+            {{ 'ALL_LINKED_REPORTS' | translate }}</span
+          >
+          <span
+            *ngIf="
+              isEditing &&
+              (comment.linked_reports && comment.linked_reports.length) === 0
+            "
+            >{{ 'NO_LINKED_REPORTS' | translate }}</span
+          >
+        </a>
+        <div class="width50" id="appReports" [ngbCollapse]="!isCollapsed">
+          <div *ngIf="isEditing" class="row post-title-link col-md-12">
+            <a
+              class="post-title-link"
+              (click)="onAddClick()"
+              href="javascript:void(0);"
+              >{{ 'REPORT_ADD' | translate}}</a>
+          </div>
+          <div [ngClass]="{'custom-add-card': comment.linked_reports.length > 0,  'card-none': comment.linked_reports.length === 0}" >
+            <div class="custom-add-card-body" *ngFor="let linkPost of comment.linked_reports">
+              <div class="flex-column-wrapper">
+                <a
+                  class="post-title-link"
+                  (click)="onPostClick(linkPost)"
+                  href="javascript:void(0);"
+                  >{{ linkPost.id }} - {{ linkPost.name }}</a>
+              </div>
+              <div *ngIf="isEditing" class="col-md-4 custom-cross-icon post-title-link">
+                <fa-icon
+                  class="float-right cursor-pointer"
+                  [icon]="'times-circle'"
+                  (click)="onRemoveClick(linkPost)"
+                ></fa-icon>
+              </div>
+            </div>
+          </div>
+          <!--<div class="row" *ngFor="let linkPost of comment.linked_reports">
+            <div class="col-md-8">
+              <a
+                class="post-title-link"
+                (click)="onPostClick(linkPost)"
+                href="javascript:void(0);"
+                >{{ linkPost.id }} - {{ linkPost.name }}</a
+              >
+            </div>
+            <div *ngIf="isEditing" class="col-md-4 post-title-link">
+              <fa-icon
+                class="float-right"
+                [icon]="'times-circle'"
+                (click)="onRemoveClick(linkPost)"
+                style="cursor: pointer;"
+              ></fa-icon>
+            </div>
+          </div>
+          <div
+            class="row col-md-12 mt-2"
+            *ngIf="
+              comment.linked_reports && comment.linked_reports.length !== 0
+            "
+          >
+            <a
+              class="post-title-link"
+              href="javascript:void(0);"
+              (click)="isCollapsed = !isCollapsed"
+              >{{ 'SHOW_LESS' | translate }}</a
+            >
+          </div> -->
+        </div>
+      </div>
+    </div>
+
+  
+   <!--Cancel and save button -->
+    <div class="d-flex justify-content-end">
+      <button
+        class="btn btn-sm mr-2"
+        type="button"
+        *ngIf="isEditing"
+        (click)="onCancelClick(); isCollapsed = false"
+      >
+        {{ 'POST_COMMENT_CANCEL' | translate }}
+      </button>
+      <button
+        class="btn btn-sm btn-primary"
+        type="button"
+        *ngIf="isEditing"
+        (click)="onSaveClick(); isCollapsed = false"
+        [disabled]="!comment.content"
+      >
+         <fa-icon [icon]="'save'"></fa-icon> 
+        {{ 'POST_COMMENT_SAVE' | translate }}
+      </button>
+    </div> 
+
+  </div>
+</div>
+<eview-post-search
+  [openModal]="openModal"
+  [isAllReports]="true"
+  (onCancelClick)="onCloseClick()"
+  (onApplyClick)="onApplyClick($event)"
+></eview-post-search>

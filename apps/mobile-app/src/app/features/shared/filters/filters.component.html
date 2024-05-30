@@ -1,0 +1,73 @@
+<div class="flex-filter-wrapper" *ngIf="filters">
+  <div class="flex-filter-row">
+    <!--left column-->
+    <div class="flex-filter-column">
+      <div *ngFor="let filter of filters">
+        <label
+          class="fontRobotoMedium custom-input-group-text"
+          for="inputGroupSelect01"
+          >{{ filter.label | translate }}</label
+        >
+        <eview-tag-selector
+          *ngIf="filter.label === 'FILTER_TAGS'"
+          [nestedTags]="nestedTags$ | async"
+        ></eview-tag-selector>
+        <select
+          class="custom-select"
+          (change)="onChange(filter.queryParam)"
+          *ngIf="filter.label !== 'FILTER_TAGS'"
+          [(ngModel)]="selectedPostFilters[filter.queryParam]"
+          [disabled]="filter.values && filter.values.length === 0"
+        >
+          <option selected value="-1">Choose...</option>
+          <option
+            *ngFor="let option of filter.values"
+            [ngValue]="option.value"
+            >{{ option.name | translate }}</option
+          >
+        </select>
+      </div>
+    </div>
+    <!--right column-->
+    <div class="flex-filter-column">
+      <div *ngFor="let formFilter of formAttributesFilters">
+        <label
+          class="fontRobotoMedium custom-input-group-text"
+          for="inputGroupSelect01"
+          >{{ formFilter.label | translate }}</label
+        >
+        <select
+          class="custom-select"
+          (change)="onChange(formFilter.key)"
+          [(ngModel)]="selectedFormFilters[formFilter.key]"
+          [disabled]="formFilter && formFilter.options.length === 0"
+        >
+          <option selected value="-1">Choose...</option>
+          <option
+            *ngFor="let option of formFilter.options"
+            [ngValue]="option"
+            >{{ option | translate }}</option
+          >
+        </select>
+      </div>
+    </div>
+  </div>
+
+  <!--Button row-->
+  <div class="flex-filter-btn-row">
+    <button
+      class="btn fontRobotoMedium btn-light float-left mr-1"
+      (click)="onCancelClick()"
+    >
+      {{ 'CLEAR' | translate }}
+    </button>
+    <button
+      [disabled]="false"
+      class="btn fontRobotoMedium btn-outline-primary"
+      (click)="onApplyClick()"
+      [disabled]="applyDisabled"
+    >
+      {{ 'APPLY' | translate }}
+    </button>
+  </div>
+</div>

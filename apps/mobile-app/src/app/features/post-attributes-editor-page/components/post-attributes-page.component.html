@@ -1,0 +1,63 @@
+<div class="m-3 mt-7">
+  <div class="row pl-3 pr-3 mb-3 justify-content-end">
+    <div class="btn-group mr-2" role="group">
+      <button class="margin-plus-icon btn btn-md btn-outline-success" (click)="onAddClick()">
+        <fa-icon [icon]="'plus'" class="mr-0"></fa-icon>
+      </button>
+      <button class="btn btn-md btn-light" (click)="onRefreshClick()">
+        <fa-icon
+          [icon]="'redo-alt'"
+          class="mr-0"
+          style="cursor: pointer;"
+        ></fa-icon>
+        <span class="d-none d-md-inline d-lg-inline d-xl-inline ml-1">{{
+          'REFRESH' | translate
+        }}</span>
+      </button>
+    </div>
+
+    <div class="btn-group" role="group">
+      <button class="btn btn-outline-primary" (click)="onSaveClick()">
+        <fa-icon [icon]="'save'" class="mr-0"></fa-icon>
+        <span class="d-none d-md-inline d-lg-inline d-xl-inline ml-1">{{
+          'SAVE' | translate
+        }}</span>
+      </button>
+    </div>
+  </div>
+  <div *ngIf="formAttributes">
+    <p
+      *ngIf="
+        !formAttributes ||
+        !formAttributes.results ||
+        formAttributes.results.length === 0
+      "
+    >
+      {{ 'NO_RECORDS' | translate }}
+    </p>
+    <div [dragula]="dragula" [(dragulaModel)]="formAttributes.results">
+      <div
+        class="custom-card mb-3 pb-3"
+        *ngFor="let fa of formAttributes.results; let i = index"
+        [style.display]="fa.id !== -1 ? 'auto' : 'none'"
+      >
+        <div class="custom-card-body card-body p-0">
+          <eview-post-attribute-editor
+            [formAttributes]="formAttributes"
+            [formAttributeIndex]="i"
+          ></eview-post-attribute-editor>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="row pl-3 pr-3 mb-3 justify-content-end" *ngIf="false">
+    <div class="btn-group" role="group">
+      <button class="btn btn-md btn-primary" (click)="onSaveClick()">
+        <fa-icon [icon]="'save'" class="mr-0"></fa-icon>
+        <span class="d-none d-md-inline d-lg-inline d-xl-inline ml-1">{{
+          'SAVE' | translate
+        }}</span>
+      </button>
+    </div>
+  </div>
+</div>

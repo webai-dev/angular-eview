@@ -1,0 +1,118 @@
+<div class="m-1">
+  <div class="row mt-3 ml-1">
+    <button class="btn btn-md btn-outline-success mb-2" (click)="isAddUserClick = true;permissionForm.reset()">
+      <fa-icon [icon]="'plus'" class="m-0"></fa-icon>
+    </button>
+  </div>
+  <div class="row">
+    <div class="col-lg-12 col-md-12 col-sm-12">
+      <table class="table table-bordered table-hover" style="width: 100%;">
+        <thead>
+          <tr>
+            <th scope="col fontRobotoBold">#</th>
+            <th scope="col fontRobotoBold" sortable="realname">
+              {{ 'USER_NAME' | translate }}
+            </th>
+            <th scope="col fontRobotoBold" sortable="role">
+              {{ 'ROLE_DESCRIPTION' | translate }}
+            </th>
+            <th scope="col fontRobotoBold">{{ 'ACTION' | translate }}</th>
+          </tr>
+        </thead>
+        <tbody>
+          <ng-container *ngIf="permissions$ | async as permissions">
+            <tr *ngFor="let permission of permissions.results; index as i">
+              <th scope="row fontRobotoBold">{{ i + 1 }}</th>
+              <td class="fontRobotoRegular">{{ permission.name }}</td>
+              <td class="fontRobotoRegular">{{ permission.description }}</td>
+              <td>
+                <button
+                  class="btn btn-sm text-center"
+                  *ngIf="i === selectedId"
+                  (click)="onConfirmClick(permission.id)"
+                >
+                  <fa-icon [icon]="'trash'" class="m-0"></fa-icon>
+                  {{ 'CONFIRM' | translate }}
+                </button>
+                <button
+                  class="btn btn-sm btn-light text-center"
+                  *ngIf="i !== selectedId"
+                  (click)="onEditClick(i)"
+                >
+                  <fa-icon [icon]="'pen'" class="m-0"></fa-icon>
+                </button>
+                <button
+                  class="btn btn-sm btn-outline-danger text-center"
+                  *ngIf="i !== selectedId"
+                  (click)="onDeleteClick(i)"
+                >
+                  <fa-icon [icon]="'trash'" class="m-0"></fa-icon>
+                </button>
+              </td>
+            </tr>
+          </ng-container>
+        </tbody>
+      </table>
+    </div>
+    <div class="col-lg-12 col-md-12 col-sm-12">
+      <ng-container *ngIf="isAddUserClick || isEditing">
+        <form
+          [formGroup]="permissionForm"
+          class="ml-3 mr-3"
+        >
+          <div class="mb-2 fontRobotoBold">{{ 'PERMISSION_HEADER' | translate }}</div>
+          <div class="row col-md-12 col-sm-12 p-0">
+            <div class="input-group mb-2">
+              <div>
+                <label class="fontRobotoMedium custom-permissions-input-group-text">{{
+                  'USER_NAME' | translate
+                }}</label>
+              </div>
+              <input
+                type="text"
+                class="form-control"
+                formControlName="name"
+                [placeholder]="'USER_NAME' | translate"
+              />
+            </div>
+            <div class="input-group mb-2">
+              <div>
+                <label class="fontRobotoMedium custom-permissions-input-group-text">{{
+                  'ROLE_DISPLAY_NAME' | translate
+                }}</label>
+              </div>
+              <input
+                type="text"
+                class="form-control"
+                formControlName="description"
+                [placeholder]="'ROLE_DESCRIPTION' | translate"
+              />
+            </div>
+            <div class="d-flex justify-content-end">
+              <button
+                class="btn btn-md btn-light mr-2"
+                type="button"
+                (click)="onCancelClick()"
+                translate
+              >
+                CANCEL
+              </button>
+              <button
+                class="btn btn-md btn-outline-primary"
+                type="button"
+                (click)="onSubmitClick()"
+                [class.btn-light]="permissionForm.valid"
+                [class.btn-primary]="!permissionForm.valid"
+                [disabled]="!permissionForm.valid"
+                translate
+              >
+                <fa-icon [icon]="'save'"></fa-icon>
+                {{ isEditing ? 'UPDATE' : 'SUBMIT' }}
+              </button>
+            </div>
+          </div>
+        </form>
+      </ng-container>
+    </div>
+  </div>
+</div>

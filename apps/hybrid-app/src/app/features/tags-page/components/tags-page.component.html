@@ -1,0 +1,28 @@
+<div class="m-3 mt-4">
+  <div class="row pl-3 pr-3 mb-3 justify-content-end">
+    <div class="btn-group" role="group">
+      <button class="btn btn-md btn-outline-success marg-right-0" (click)="onAddClick()">
+        <fa-icon [icon]="'plus'" class="mr-0"></fa-icon>
+      </button>
+      <button class="btn btn-md btn-light" (click)="onRefreshClick()">
+        <fa-icon [icon]="'redo-alt'" class="mr-0"></fa-icon>
+        <span class="d-none d-md-inline d-lg-inline d-xl-inline ml-1">{{
+          'REFRESH' | translate
+        }}</span>
+      </button>
+    </div>
+  </div>
+  <p *ngIf="!tags || tags.length === 0">
+    {{ 'NO_RECORDS' | translate }}
+  </p>
+  <div
+    class="card mb-2"
+    *ngFor="let tag of tags"
+    [style.display]="tag.id !== -1 ? 'auto' : 'none'"
+    style="border: none;"
+  >
+    <div class="card-body p-0" style="padding-bottom: 0 !important;">
+      <eview-tag-editor [tag]="tag"></eview-tag-editor>
+    </div>
+  </div>
+</div>

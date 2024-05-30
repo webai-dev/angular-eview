@@ -1,0 +1,94 @@
+<!-- Create report incident popup -->
+  <div class="modal-header">
+    <h4 class="modal-title createNewIncidentLabel fontRobotoBold" id="modal-basic-title">{{ (isEditing ? 'UPDATE_INCIDENT' : 'CREATE_NEW_INCIDENT') | translate }}</h4>
+    <button type="button" class="close" aria-label="Close" (click)="closeModal('Cross click')">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+   
+    <!--Modal Body-->
+
+    <div class="m-3 mt-4" *ngIf="formAttributesEx">
+      <div class="mb-3" *ngIf="isEditing">
+        <h6 class="mb-2 text-muted">
+          <span class="mr-2"> {{ 'POST_ID' | translate }} {{ post.id }} </span>
+          <span class="mr-2">
+            <fa-icon [icon]="'inbox'"></fa-icon>
+            {{ PostHelpers.FormatSource(post) | translate }}</span
+          >
+          <span class="mr-2">
+            <fa-icon [icon]="'calendar'"></fa-icon>
+            {{ PostHelpers.FormatDate(post, 'created', format.dateTime) }}</span
+          >
+          <span class="mr-2">
+            <fa-icon [icon]="'user-circle'"></fa-icon>
+            {{ UsersHelpers.FormatUserRealname(user$ | async) || '?' }}</span
+          >
+          <span class="badge badge-light mr-2">
+            <span style="font-weight: lighter;">
+              {{ 'POST_STATUS' | translate }}
+            </span>
+            {{ PostHelpers.FormatStatus(post) | translate }}
+          </span>
+          <span class="badge badge-light mr-2">
+            <span style="font-weight: lighter;">
+              {{ 'POST_PRIORITY' | translate }}
+            </span>
+            <fa-icon
+              [icon]="'exclamation-triangle'"
+              class="m-0"
+              *ngIf="post.priority === PostPriority.Urgent"
+            ></fa-icon>
+            {{ PostHelpers.FormatPriority(post) | translate }}
+          </span>
+        </h6>
+      </div>
+      <div class="flexContainer">
+        <div class="flex-item borderColorBlack" *ngFor="let fa of formAttributesEx.results">
+          <eview-form-attribute [FormAttribute]="fa"></eview-form-attribute>
+          <div
+            class="mb-3"
+            style="margin-top: -8px;"
+            *ngIf="fa.type === FormAttributeType.Point"
+          >
+            <span
+              class="badge badge-light mr-2"
+              *ngFor="let managementLevel of managementLevels"
+            >
+              <span style="font-weight: lighter;">
+                {{ managementLevel.key | translate }}
+              </span>
+              {{ managementLevel.value | translate }}
+            </span>
+          </div>
+        </div>
+      </div>
+      <div class="row pl-3 pr-3 justify-content-end mr-auto">
+        <button
+          class="btn btn-md btn-light mr-2 btnSubmit"
+          type="button"
+          (click)="onCancelClick('Cancel')"
+          *ngIf="isEditing"
+          translate
+        >
+        {{ 'CANCEL' | translate }}
+        </button>
+        <button
+          class="btn btn-md btnSubmit"
+          type="button"
+          (click)="onSubmitClick()"
+          [class.btn-light]="isFormInvalid()"
+          [class.btn-primary]="!isFormInvalid()"
+          [disabled]="isFormInvalid()"
+          translate
+        >
+          <!-- <fa-icon [icon]="'save'"></fa-icon> -->
+          {{ (isEditing ? 'UPDATE' : 'SUBMIT') | translate }}
+        </button>
+      </div>
+    </div>
+
+  </div>
+
+

@@ -1,0 +1,57 @@
+<div class="m-3">
+
+  <!-- <div class="row">
+    <div class="input-group">
+      <label class="float-left font-weight-bold">
+        {{ 'ACCESS_MGMT' | translate | uppercase }}
+      </label>
+    </div>
+</div> -->
+
+<!-- <div class="flex-user-mgmt-wrapper">
+  <label class="fontRobotoBold user-mgmt-text">
+    {{ 'USER_MANAGEMENT' | translate  }}
+  </label>
+</div> -->
+
+<div class="marg-top-2">
+    <ul ngbNav #nav="ngbNav" class="nav-tabs">
+      <li [ngbNavItem]="1">
+        <a class="custom-tab-header fontRobotoMedium" ngbNavLink>{{ 'USERS' | translate}}</a>
+        <ng-template ngbNavContent>
+          <div><eview-users-management></eview-users-management></div>
+        </ng-template>
+        <li [ngbNavItem]="2">
+          <a class="custom-tab-header fontRobotoMedium" ngbNavLink>{{ 'ROLES' | translate }}</a>
+          <ng-template ngbNavContent>
+            <div><eview-roles-management></eview-roles-management></div>
+          </ng-template>
+        </li>
+        <li [ngbNavItem]="3">
+          <a class="custom-tab-header fontRobotoMedium" ngbNavLink>{{ 'PERMISSIONS' | translate }}</a>
+          <ng-template ngbNavContent>
+            <div><eview-permissions-management></eview-permissions-management></div>
+          </ng-template>
+        </li>
+    </ul>
+    <div [ngbNavOutlet]="nav" class="mt-2"></div>
+    <!-- <ngb-tabset [justify]="currentJustify" class="custom-tabset">
+      <ngb-tab title="Users">
+        <ng-template ngbTabContent>
+          <div><eview-users-management></eview-users-management></div>
+        </ng-template>
+      </ngb-tab>
+      <ngb-tab title="Roles">
+        <ng-template ngbTabContent>
+        <div><eview-roles-management></eview-roles-management></div>
+        </ng-template>
+      </ngb-tab>
+      <ngb-tab title="Permissions">
+        <ng-template ngbTabContent>
+          <div><eview-permissions-management></eview-permissions-management></div>
+        </ng-template>
+      </ngb-tab>
+    </ngb-tabset> -->
+</div>
+
+</div>

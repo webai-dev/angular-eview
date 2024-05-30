@@ -1,0 +1,35 @@
+<div class="notification-container">
+  <div
+    class="notification row p-2"
+    *ngIf="!notifications || (notifications && notifications.length === 0)"
+  >
+    <div class="col-1 my-auto"></div>
+    <div class="col">
+      <div class="row fontRobotoMedium" translate>
+        NO_RECORDS
+      </div>
+    </div>
+  </div>
+  <div *ngIf="notifications">
+    <div
+      class="notification fontRobotoMedium row p-2 mb-1"
+      *ngFor="let notification of notifications"
+      [class.notification-unread]="isUnread(notification)"
+    >
+      <div class="col-1 my-auto">
+        <fa-icon [icon]="'stream'"></fa-icon>
+      </div>
+      <div class="col">
+        <div class="row fontRobotoMedium">
+          {{ notification.user.realname || 'Unknown' }}&nbsp;
+          <span translate>
+            {{ NotificationHelpers.FormatVerb(notification) }} </span
+          >&nbsp;{{ NotificationHelpers.FormatPostTitle(notification) }}&nbsp;
+        </div>
+        <div class="row fontRobotoMedium">
+          {{ NotificationHelpers.FormatDate(notification, format.dateTime) }}
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

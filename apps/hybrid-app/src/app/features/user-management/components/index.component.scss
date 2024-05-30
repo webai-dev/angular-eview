@@ -1,0 +1,39 @@
+.flex-user-mgmt-wrapper {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  margin-top: 2.5em;
+  margin-right: 1em;
+  align-items: center;
+  max-width: 100%;
+}
+
+.user-mgmt-text {
+  font-size: 24px;
+}
+
+.custom-tabset {
+  margin-left: 1em;
+  width: 100%;
+}
+
+.nav-tabs .nav-link:hover {
+  border: none !important;
+}
+
+.nav-tabs .nav-link.active {
+  background-color: #FAFAFA !important;
+  border-bottom: 4.5px solid #4383c2 !important;
+}
+
+.custom-tab-header {
+  font-size: 14px !important;
+  font-weight: unset !important;
+  color: #4383c2 !important;
+  margin-right: 5px;
+}
+
+.marg-top-2 {
+  margin-top : 2em;
+}
+

@@ -1,0 +1,30 @@
+.filter-list {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.input-group {
+  margin-bottom: 10px;
+  padding: 1px 5px;
+}
+
+.flex-filter-row {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  gap: 0.5em;
+}
+
+.flex-filter-column {
+  display: flex;
+  flex-direction: column;
+  flex-basis: 100%;
+  flex: 0.5;
+}
+
+.flex-filter-btn-row {
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.5em;
+  margin-top: 1em;
+}

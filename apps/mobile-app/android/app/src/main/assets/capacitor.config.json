@@ -1,0 +1,7 @@
+{
+  "appId": "org.unicc.ceici",
+  "appName": "CEICI",
+  "bundledWebRuntime": false,
+  "webDir": "www",
+  "npmClient": "npm"
+}

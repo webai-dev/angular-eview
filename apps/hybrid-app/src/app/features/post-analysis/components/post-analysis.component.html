@@ -1,0 +1,176 @@
+<!--Date for custom reports-->
+<div style="margin: 30px 0px 0px 15px;" *ngIf="posts">
+  <ul ngbNav #nav="ngbNav" [(activeId)]="active" class="nav-tabs">
+    <li [ngbNavItem]="1">
+      <a
+        class="custom-tab-header fontRobotoMedium nav-link active"
+        ngbNavLink
+        >{{ 'MENU_ANALYSIS_FILTERS' | translate }}</a
+      >
+    </li>
+  </ul>
+  <div class="flex-template-wrapper">
+    <eview-forms (onFormSelect)="onFormChange($event)"></eview-forms>
+  </div>
+  <div class="flex-custom-date-wrapper">
+    <p *ngIf="savedReportsList && savedReportsList.length === 0">
+      {{ 'NO_TEMPLATES' | translate }}
+    </p>
+    <div
+      class="input-group"
+      *ngIf="savedReportsList && savedReportsList.length > 0"
+    >
+      <div>
+        <label class="fontRobotoMedium font-report-text label-line-height">{{
+          'All_REPORTS' | translate
+        }}</label>
+      </div>
+      <div>
+        <select
+          class="marg-left-1 form-control custom-select"
+          [(ngModel)]="selectedReport"
+          (change)="getAllReportsData()"
+        >
+          <option></option>
+          <option *ngFor="let item of savedReportsList" [ngValue]="item">{{
+            item
+          }}</option>
+        </select>
+      </div>
+      
+    </div>
+  </div>
+  <p class="informative-text">{{'DATE_SUGGEST_TEXT'|translate}}</p>
+  <div class="flex-custom-date-wrapper">
+    <div class="flex-custom-date-row">
+      <div>
+        <label class="fontRobotoBold font-report-text label-line-height">{{
+          'FROM_DATE' | translate
+          }}</label>
+      </div>
+      <input class="marg-left-1 form-control" ngbDatepicker #fromDate="ngbDatepicker" [(ngModel)]="fromdate" />
+      <div>
+        <button class="btn btn-outline-secondary"
+          style="border-top-right-radius: 4px !important; border-bottom-right-radius: 4px;" (click)="fromDate.toggle()"
+          type="button">
+          <fa-icon [icon]="'calendar-alt'"></fa-icon>
+        </button>
+      </div>
+    </div>
+  <div class="flex-custom-date-row">
+    <div>
+      <label class="fontRobotoMedium font-report-text label-line-height">{{
+        'TO_DATE' | translate
+      }}</label>
+    </div>
+    <input
+      class="marg-left-1 form-control"
+      ngbDatepicker
+      #toDate="ngbDatepicker"
+      [(ngModel)]="todate"
+    />
+    <div>
+      <button
+        class="btn btn-outline-secondary"
+        style="border-top-right-radius: 4px !important; border-bottom-right-radius: 4px;"
+        (click)="toDate.toggle()"
+        type="button"
+      >
+        <fa-icon [icon]="'calendar-alt'"></fa-icon>
+      </button>
+    </div>
+  </div>
+  <div style="margin-left:25px; margin-top: -10px;">
+          <button
+            (click)="getAllReportsData()"
+            class="btn custom-btn-outline-primary fontRobotoMedium btn-template-row-text btn-border"
+          >
+            {{ 'APPLY' | translate }}
+          </button>
+    </div>
+  </div>
+</div>
+<div class="analysis-table-wrapper mt-4">
+  <p
+    *ngIf="showReport && (posts && posts.count === 0)"
+    class="font-weight-bold ml-3"
+  >
+    {{ 'NO_RECORDS' | translate }}
+  </p>
+  <button
+    *ngIf="showReport"
+    class="btn marg-right-2 pad-0 btn-round-border btn-sm btn-outline-primary"
+    (click)="generatePdf()"
+  >
+    {{ 'EXPORT_ALL' | translate }}
+  </button>
+  <button
+    class="btn marg-right-2 pad-0 btn-round-border btn-sm btn-outline-primary ml-1"
+    title="heatmap"
+    *ngIf="showReport"
+    style="cursor: pointer;"
+    (click)="onShowMap()"
+  >
+    <fa-icon [icon]="'map'"></fa-icon>
+    <span class="">{{ 'SHOW_MAP' | translate }}</span>
+  </button>
+  <button
+    *ngIf="showReport"
+    class="btn marg-right-2 pad-0 btn-round-border btn-sm btn-outline-primary ml-1"
+    (click)="deleteReport()"
+  >
+    {{ 'DELETE_REPORT' | translate }}
+  </button>
+
+  <div id="report-cluster" class="marg-top-2" *ngIf="showReport">
+    <eview-post-graph
+      [isSingle]="true"
+      [index]="1"
+      [type]="graphType"
+      [data]="regionalMapData"
+      [xAxisLabel]="xAxisLabel"
+      [yAxisLabel]="yAxisLabel"
+      [legendPosition]="legendPosition"
+      [legendTitle]="Regions"
+      [legendTitle]="category"
+    ></eview-post-graph>
+    <span *ngFor="let chart of mapReports; let i = index">
+      <fm-pivot
+        [toolbar]="true"
+        (beforetoolbarcreated)="onCustomizeToolbar($event)"
+        (ready)="onReportReady($event)"
+        [report]="chart"
+        [licenseKey]="licenseKey"
+      >
+      </fm-pivot>
+    </span>
+  </div>
+</div>
+<ng-template #content let-modal>
+  <div class="modal-body">
+    <div class="mb-4">
+      <button
+        type="button"
+        class="close"
+        aria-label="Close"
+        (click)="modal.dismiss('Cross click')"
+      >
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </div>
+    <div class="col-md-12">
+      <div class="mb-2 col-md-12" style="text-align: center;">
+        <label>{{ 'DELETE_CONFIRM' | translate }}</label>
+      </div>
+    </div>
+    <div style="text-align: center;">
+      <button
+        type="button"
+        class="btn btn-sm btn-change-status btn-primary"
+        (click)="onConfirmClick()"
+      >
+        {{ 'CONFIRM' | translate }}
+      </button>
+    </div>
+  </div>
+</ng-template>

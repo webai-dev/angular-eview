@@ -1,0 +1,91 @@
+@import '../../../../../styles.scss';
+
+.card {
+  border-radius: 10px;
+  // cursor: pointer;
+  &.active {
+    border-top: 5px solid $undp-jtf-active-card-color;
+    background-color: $undp-jtf-dark-light-bg-color;
+    box-shadow: 0 0 2px $undp-jtf-accent-color;
+    .card-body {
+      .card-title {
+        color: $undp-jtf-text-color;
+      }
+      padding: 0.5rem;
+    }
+  }
+  &.report-urgency {
+    border-top: 5px solid $undp-jtf-status-warning-color;
+  }
+  .linked-posts {
+    border-radius: 0.3rem;
+    border: solid 1px $undp-jtf-dark-bg-color;
+  }
+  .priority {
+    right: 15px;
+    position: absolute;
+    bottom: 10px;
+  }
+}
+
+.flex-card-row-wrapper {
+  display: flex;
+  flex-direction: row;
+  flex-wrap:wrap;
+  width: 100%;
+}
+
+.flex-card-column-wrapper {
+  display:flex;
+  flex-direction: column;
+  flex-wrap: wrap;
+}
+
+.word-wrap {
+  word-break: break-word;
+}
+
+.flex-card-row {
+  display: flex;
+  flex-grow: 1;
+  width: 80%;
+  padding-left: 10px;
+}
+
+.flex-card-report-info-row {
+  display: flex;
+  gap: 1em;
+}
+
+.arrow-opacity {
+  opacity: 0.5;
+}
+
+.incident-type-circle {
+  background-color: #ccffff;
+  opacity: 0.5;
+  width: 50px;
+  height: 50px;
+  flex: 1;
+  flex-grow: 0;
+  position: relative;
+  border-radius: 50%;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  display: flex;
+}
+
+.incident-type-circle img {
+  height: 50px;
+  width: auto;
+}
+
+.pad-left-right-5 {
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+.pad-left-4 {
+  padding-left:4px;
+}
